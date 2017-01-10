@@ -39,7 +39,7 @@ def myCreateGrid(world, cellsize):
             maxX = item[0]
             maxY = item[1]
     dimensions = (maxX, maxY)
-    print ('lines', world.getLines())
+    # print ('lines', world.getLines())
     # print ('lines w/o borders', world.getLinesWithoutBorders())
     # print ('obstacles', world.getObstacles())
     drawCross(world.debug, (0, 0))
@@ -61,7 +61,23 @@ def myCreateGrid(world, cellsize):
     drawCross(world.debug, (300, 400))
     drawCross(world.debug, (454, 350))
     drawCross(world.debug, (425, 325))
+    grid = []
+    for i in range(maxX):
+        grid.append([])
+        for j in range(maxY):
+            for obstacle in world.getObstacles():
+                if (obstacle.pointInside((i, j))):
+                    grid[i].append(False)
+                else:
+                    grid[i].append(True)
 
+    # grid.append([])
+    # grid.append([])
+    # grid[0].append(1)
+    # grid[0].append(2)
+    # grid[1].append(3)
+    # grid[1].append(4)
+    # print (grid[1][1])
     ### YOUR CODE GOES ABOVE HERE ###
     return grid, dimensions
 
