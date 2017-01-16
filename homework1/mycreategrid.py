@@ -84,17 +84,24 @@ def myCreateGrid(world, cellsize):
     #     counter += 1
     # https://github.gatech.edu/rmendes3/4731_1/blob/master/randomgridnavigator.py
 
-
-
     for i in range(maxX):
-        grid.append([])
+        temp = []
         for j in range(maxY):
+            cond = True
             for obstacle in world.getObstacles():
-                if withinRangeOfPoints((i, j), cellsize, obstacle.getPoints()):
-                    print ((i, j), 'is within the range of obstacle', obstacle)
-                    grid[i].append(False)
-                else:
-                    grid[i].append(True)
+                if obstacle.pointInside((i, j)):
+                    cond = False
+            temp.append(cond)
+                # if withinRangeOfPoints((i, j), cellsize, obstacle.getPoints()):
+                    # print ((i, j), 'is within the range of obstacle', obstacle)
+                    # temp.append(False)
+                    # break
+                # else:
+                    # temp.append(True)
+                    # break
+        grid.append(temp)
+    # grid = numpy.array(grid)
+    print (grid[608])
 
     # print (grid[0][0])
     # print ('grid[620][690]', grid[620][690])
