@@ -32,6 +32,7 @@ def myCreateGrid(world, cellsize):
     maxX = int(math.ceil(world.dimensions[0] / int_cellsize))
     maxY = int(math.ceil(world.dimensions[1] / int_cellsize))
     print maxX, maxY
+    print world.getLines()
     dimensions = (maxX, maxY)
 
     drawCross(world.debug, (620, 690))
@@ -49,11 +50,16 @@ def myCreateGrid(world, cellsize):
             drawCross(world.debug, (xLoc, yLoc))
             # if i % int_cellsize == 0 and j % int_cellsize == 0:
             for obstacle in world.getObstacles():
+                if i == 11 and j == 8:
+                    # print obstacle.pointInside((xLoc, yLoc))
+                    # print isGood((xLoc, yLoc), world, cellsize)
+                    print xLoc, yLoc
                 if obstacle.pointInside((xLoc, yLoc)):
                 # if withinRangeOfPoints((i, j), cellsize, obstacle.getPoints()):
                 # if (isGood((i, j), world, cellsize)):
                     grid[i][j] = False
     print (grid)
+    print (grid[11][8])
 
     # print (grid[0][0])
     # print ('grid[620][690]', grid[620][690])
