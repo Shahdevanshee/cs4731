@@ -32,7 +32,7 @@ nav = GreedyGridNavigator()
 
 world = GameWorld(SEED, WORLD, SCREEN)
 agent = Agent(AGENT, (SCREEN[0]/2, SCREEN[1]/2), 0, SPEED, world)
-world.initializeTerrain([[(628, 698), (582, 717), (549, 688), (554, 546), (676, 548)], [(942, 484), (811, 396), (843, 299), (921, 300)], [(457, 422), (371, 506), (300, 515), (300, 400), (454, 350)]], (0, 255, 0), 2, TREE)
+world.initializeTerrain([[(628, 698), (582, 717), (549, 688), (554, 546), (676, 548)], [(942, 484), (811, 396), (843, 299), (921, 300)], [(457, 422), (371, 506), (300, 515), (300, 400), (454, 350)]], (255, 0, 0), 2, None)
 world.setPlayerAgent(agent)
 agent.setNavigator(nav)
 nav.setWorld(world)
