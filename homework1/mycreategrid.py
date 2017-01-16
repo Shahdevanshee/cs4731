@@ -28,8 +28,10 @@ def myCreateGrid(world, cellsize):
     grid = None
     dimensions = (0, 0)
     ### YOUR CODE GOES BELOW HERE ###
-    maxX = world.dimensions[0]
-    maxY = world.dimensions[1]
+    int_cellsize = int(cellsize)
+    maxX = int(math.ceil(world.dimensions[0] / int_cellsize))
+    maxY = int(math.ceil(world.dimensions[1] / int_cellsize))
+    print maxX, maxY
     dimensions = (maxX, maxY)
 
     drawCross(world.debug, (620, 690))
@@ -40,16 +42,18 @@ def myCreateGrid(world, cellsize):
 
     grid = numpy.ones((maxX, maxY), dtype=bool)
 
-    int_cellsize = int(cellsize)
     for i in range(maxX):
         for j in range(maxY):
-            if i % int_cellsize == 0 and j % int_cellsize == 0:
-                for obstacle in world.getObstacles():
-                    if obstacle.pointInside((i, j)):
-                    # if withinRangeOfPoints((i, j), cellsize, obstacle.getPoints()):
-                    # if (isGood((i, j), world, cellsize)):
-                        grid[i][j] = False
-    # print (grid[608])
+            xLoc = i * int_cellsize
+            yLoc = j * int_cellsize
+            drawCross(world.debug, (xLoc, yLoc))
+            # if i % int_cellsize == 0 and j % int_cellsize == 0:
+            for obstacle in world.getObstacles():
+                if obstacle.pointInside((xLoc, yLoc)):
+                # if withinRangeOfPoints((i, j), cellsize, obstacle.getPoints()):
+                # if (isGood((i, j), world, cellsize)):
+                    grid[i][j] = False
+    print (grid)
 
     # print (grid[0][0])
     # print ('grid[620][690]', grid[620][690])
