@@ -42,6 +42,22 @@ def myCreateGrid(world, cellsize):
     # drawCross(world.debug, (980, 484))
 
     grid = numpy.ones((maxX, maxY), dtype=bool)
+    # print world.getObstacles()[5].getLines()
+    drawCross(world.debug, (81, 38))
+    drawCross(world.debug, (119, 38))
+    for line in world.getObstacles()[5].getLines():
+        # print line
+        # x = getIntersectPoint((0, 38), (152, 38), line[0], line[1])
+        # y = calculateIntersectPoint((0, 38), (152, 38), line[0], line[1])
+        z = rayTrace((76, 38), (114, 38), line)
+        print (line, ' intersects at ', z)
+    # print rayTraceWorld((38, 76), (114, 76), world.getObstacles()[5].getLines()[2])
+    # for obstacle in world.getObstacles():
+        # print obstacle.getPoints()
+        # for point in obstacle.getPoints():
+            # print point
+            # if point[0] == 114 or point[0] == 113:
+                # print point
 
     for i in range(maxX):
         for j in range(maxY):
@@ -56,7 +72,22 @@ def myCreateGrid(world, cellsize):
                 # if (isGood((i, j), world, cellsize)):
                 if checkPoint(obstacle, xLoc, yLoc, int_cellsize):
                     grid[i][j] = False
-    # print (grid)
+
+            for line in world.getObstacles().getLines():
+                query = rayTrace((xLoc, yLoc), (xLoc + int_cellsize, yLoc), line) or rayTrace((xLoc, yLoc), (xLoc, yLoc + int_cellsize), line)
+                # print line, query
+                if query is not None:
+                    print ('before', grid[i][j])
+                    print ('this is the line you are looking for1', line)
+                    grid[i][j] = False
+                    print ('after', grid[i][j])
+
+                # if rayTraceWorld(xLoc, yLoc, world.getLines()) is not None:
+                    # grid[i][j] = False
+                # for point in obstacle.getPoints():
+
+                    # grid[point[0]][point[1]] = False
+    print (grid)
     # print (grid[11][8])
 
     # print (grid[0][0])
@@ -68,15 +99,16 @@ def myCreateGrid(world, cellsize):
 
 
 def checkPoint(obstacle, xLoc, yLoc, cellsize):
+    # print (obstacle.getPoints())
     return \
     obstacle.pointInside((xLoc, yLoc)) or \
     obstacle.pointInside((xLoc + cellsize, yLoc)) or \
     obstacle.pointInside((xLoc, yLoc + cellsize)) or \
-    obstacle.pointInside((xLoc + cellsize, yLoc + cellsize)) or \
-    pointOnPolygon((xLoc, yLoc), obstacle.getPoints()) or \
-    pointOnPolygon((xLoc + cellsize, yLoc), obstacle.getPoints()) or \
-    pointOnPolygon((xLoc, yLoc + cellsize), obstacle.getPoints()) or \
-    pointOnPolygon((xLoc + cellsize, yLoc + cellsize), obstacle.getPoints())
+    obstacle.pointInside((xLoc + cellsize, yLoc + cellsize))
+    # pointOnPolygon((xLoc, yLoc), obstacle.getPoints()) or \
+    # pointOnPolygon((xLoc + cellsize, yLoc), obstacle.getPoints()) or \
+    # pointOnPolygon((xLoc, yLoc + cellsize), obstacle.getPoints()) or \
+    # pointOnPolygon((xLoc + cellsize, yLoc + cellsize), obstacle.getPoints())
 
 
 
