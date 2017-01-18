@@ -31,15 +31,15 @@ def myCreateGrid(world, cellsize):
     int_cellsize = int(cellsize)
     maxX = int(math.ceil(world.dimensions[0] / int_cellsize))
     maxY = int(math.ceil(world.dimensions[1] / int_cellsize))
-    print maxX, maxY
-    print world.getLines()
+    # print maxX, maxY
+    # print world.getLines()
     dimensions = (maxX, maxY)
 
-    drawCross(world.debug, (620, 690))
-    drawCross(world.debug, (628, 698))
-    drawCross(world.debug, (635, 705))
-    drawCross(world.debug, (608, 684))
-    drawCross(world.debug, (980, 484))
+    # drawCross(world.debug, (620, 690))
+    # drawCross(world.debug, (628, 698))
+    # drawCross(world.debug, (635, 705))
+    # drawCross(world.debug, (608, 684))
+    # drawCross(world.debug, (980, 484))
 
     grid = numpy.ones((maxX, maxY), dtype=bool)
 
@@ -48,18 +48,16 @@ def myCreateGrid(world, cellsize):
             xLoc = i * int_cellsize
             yLoc = j * int_cellsize
             drawCross(world.debug, (xLoc, yLoc))
-            # if i % int_cellsize == 0 and j % int_cellsize == 0:
+            drawCross(world.debug, (xLoc + int_cellsize, yLoc))
+            drawCross(world.debug, (xLoc, yLoc + int_cellsize))
+            drawCross(world.debug, (xLoc + int_cellsize, yLoc + int_cellsize))
             for obstacle in world.getObstacles():
-                if i == 11 and j == 8:
-                    # print obstacle.pointInside((xLoc, yLoc))
-                    # print isGood((xLoc, yLoc), world, cellsize)
-                    print xLoc, yLoc
-                if obstacle.pointInside((xLoc, yLoc)):
                 # if withinRangeOfPoints((i, j), cellsize, obstacle.getPoints()):
                 # if (isGood((i, j), world, cellsize)):
+                if checkPoint(obstacle, xLoc, yLoc, int_cellsize):
                     grid[i][j] = False
-    print (grid)
-    print (grid[11][8])
+    # print (grid)
+    # print (grid[11][8])
 
     # print (grid[0][0])
     # print ('grid[620][690]', grid[620][690])
@@ -67,4 +65,18 @@ def myCreateGrid(world, cellsize):
     # print ('grid[635][705]', grid[635][705])
     ### YOUR CODE GOES ABOVE HERE ###
     return grid, dimensions
+
+
+def checkPoint(obstacle, xLoc, yLoc, cellsize):
+    return \
+    obstacle.pointInside((xLoc, yLoc)) or \
+    obstacle.pointInside((xLoc + cellsize, yLoc)) or \
+    obstacle.pointInside((xLoc, yLoc + cellsize)) or \
+    obstacle.pointInside((xLoc + cellsize, yLoc + cellsize)) or \
+    pointOnPolygon((xLoc, yLoc), obstacle.getPoints()) or \
+    pointOnPolygon((xLoc + cellsize, yLoc), obstacle.getPoints()) or \
+    pointOnPolygon((xLoc, yLoc + cellsize), obstacle.getPoints()) or \
+    pointOnPolygon((xLoc + cellsize, yLoc + cellsize), obstacle.getPoints())
+
+
 
