@@ -29,8 +29,8 @@ def myCreateGrid(world, cellsize):
     dimensions = (0, 0)
     ### YOUR CODE GOES BELOW HERE ###
     int_cellsize = int(cellsize)
-    maxX = int(math.ceil(world.dimensions[0] / int_cellsize))
-    maxY = int(math.ceil(world.dimensions[1] / int_cellsize))
+    maxX = int(math.ceil(world.getDimensions()[0] / int_cellsize))
+    maxY = int(math.ceil(world.getDimensions()[1] / int_cellsize))
     # print maxX, maxY
     # print world.getLines()
     dimensions = (maxX, maxY)
@@ -43,14 +43,14 @@ def myCreateGrid(world, cellsize):
 
     grid = numpy.ones((maxX, maxY), dtype=bool)
     # print world.getObstacles()[5].getLines()
-    drawCross(world.debug, (81, 38))
-    drawCross(world.debug, (119, 38))
-    for line in world.getObstacles()[5].getLines():
+    # drawCross(world.debug, (81, 38))
+    # drawCross(world.debug, (119, 38))
+    # for line in world.getObstacles()[5].getLines():
         # print line
         # x = getIntersectPoint((0, 38), (152, 38), line[0], line[1])
         # y = calculateIntersectPoint((0, 38), (152, 38), line[0], line[1])
-        z = rayTrace((76, 38), (114, 38), line)
-        print (line, ' intersects at ', z)
+        # z = rayTrace((76, 38), (114, 38), line)
+        # print (line, ' intersects at ', z)
     # print rayTraceWorld((38, 76), (114, 76), world.getObstacles()[5].getLines()[2])
     # for obstacle in world.getObstacles():
         # print obstacle.getPoints()
@@ -63,31 +63,31 @@ def myCreateGrid(world, cellsize):
         for j in range(maxY):
             xLoc = i * int_cellsize
             yLoc = j * int_cellsize
-            drawCross(world.debug, (xLoc, yLoc))
-            drawCross(world.debug, (xLoc + int_cellsize, yLoc))
-            drawCross(world.debug, (xLoc, yLoc + int_cellsize))
-            drawCross(world.debug, (xLoc + int_cellsize, yLoc + int_cellsize))
+            # drawCross(world.debug, (xLoc, yLoc))
+            # drawCross(world.debug, (xLoc + int_cellsize, yLoc))
+            # drawCross(world.debug, (xLoc, yLoc + int_cellsize))
+            # drawCross(world.debug, (xLoc + int_cellsize, yLoc + int_cellsize))
             for obstacle in world.getObstacles():
                 # if withinRangeOfPoints((i, j), cellsize, obstacle.getPoints()):
                 # if (isGood((i, j), world, cellsize)):
                 if checkPoint(obstacle, xLoc, yLoc, int_cellsize):
                     grid[i][j] = False
 
-            for line in world.getObstacles().getLines():
-                query = rayTrace((xLoc, yLoc), (xLoc + int_cellsize, yLoc), line) or rayTrace((xLoc, yLoc), (xLoc, yLoc + int_cellsize), line)
+                for line in obstacle.getLines():
+                    # query = rayTrace((xLoc, yLoc), (xLoc + int_cellsize, yLoc), line) or rayTrace((xLoc, yLoc), (xLoc, yLoc + int_cellsize), line) or rayTrace((xLoc + int_cellsize, yLoc), (xLoc + int_cellsize, yLoc + int_cellsize), line) or rayTrace((xLoc, yLoc + int_cellsize), (xLoc + int_cellsize, yLoc + int_cellsize), line)
                 # print line, query
-                if query is not None:
-                    print ('before', grid[i][j])
-                    print ('this is the line you are looking for1', line)
-                    grid[i][j] = False
-                    print ('after', grid[i][j])
+                    if checkIntersection(line, xLoc, yLoc, int_cellsize) is not None:
+                        # print ('before', grid[i][j])
+                        # print ('this is the line you are looking for1', line)
+                        grid[i][j] = False
+                        # print ('after', grid[i][j])
 
                 # if rayTraceWorld(xLoc, yLoc, world.getLines()) is not None:
                     # grid[i][j] = False
                 # for point in obstacle.getPoints():
 
                     # grid[point[0]][point[1]] = False
-    print (grid)
+    # print (grid)
     # print (grid[11][8])
 
     # print (grid[0][0])
@@ -104,11 +104,18 @@ def checkPoint(obstacle, xLoc, yLoc, cellsize):
     obstacle.pointInside((xLoc, yLoc)) or \
     obstacle.pointInside((xLoc + cellsize, yLoc)) or \
     obstacle.pointInside((xLoc, yLoc + cellsize)) or \
-    obstacle.pointInside((xLoc + cellsize, yLoc + cellsize))
-    # pointOnPolygon((xLoc, yLoc), obstacle.getPoints()) or \
-    # pointOnPolygon((xLoc + cellsize, yLoc), obstacle.getPoints()) or \
-    # pointOnPolygon((xLoc, yLoc + cellsize), obstacle.getPoints()) or \
-    # pointOnPolygon((xLoc + cellsize, yLoc + cellsize), obstacle.getPoints())
+    obstacle.pointInside((xLoc + cellsize, yLoc + cellsize)) or \
+    pointOnPolygon((xLoc, yLoc), obstacle.getPoints()) or \
+    pointOnPolygon((xLoc + cellsize, yLoc), obstacle.getPoints()) or \
+    pointOnPolygon((xLoc, yLoc + cellsize), obstacle.getPoints()) or \
+    pointOnPolygon((xLoc + cellsize, yLoc + cellsize), obstacle.getPoints())
 
+
+def checkIntersection(line, xLoc, yLoc, cellsize):
+    return \
+    rayTrace((xLoc, yLoc), (xLoc + cellsize, yLoc), line) or \
+    rayTrace((xLoc, yLoc), (xLoc, yLoc + cellsize), line) or \
+    rayTrace((xLoc + cellsize, yLoc), (xLoc + cellsize, yLoc + cellsize), line) or \
+    rayTrace((xLoc, yLoc + cellsize), (xLoc + cellsize, yLoc + cellsize), line)
 
 
