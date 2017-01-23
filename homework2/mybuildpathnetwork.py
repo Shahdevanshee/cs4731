@@ -25,8 +25,18 @@ from core import *
 
 # Creates the pathnetwork as a list of lines between all pathnodes that are traversable by the agent.
 def myBuildPathNetwork(pathnodes, world, agent = None):
-	lines = []
-	### YOUR CODE GOES BELOW HERE ###
-
-	### YOUR CODE GOES ABOVE HERE ###
-	return lines
+    lines = []
+    ### YOUR CODE GOES BELOW HERE ###
+    # https://github.gatech.edu/rmendes3/4731_1/blob/master/randomgridnavigator.py
+    # https://github.gatech.edu/ywang438/gameAI/blob/master/mycreatepathnetwork.py
+    for i, item in enumerate(pathnodes):
+        # print i
+        print item
+        # print agent.getRadius()
+        # print agent.getMaxRadius()
+        if i == len(pathnodes) - 1:
+            lines.append((pathnodes[i], pathnodes[0]))
+        else:
+            lines.append((pathnodes[i], pathnodes[i + 1]))
+    ### YOUR CODE GOES ABOVE HERE ###
+    return lines

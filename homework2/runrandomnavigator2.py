@@ -17,7 +17,7 @@
 '''
 
 import sys, pygame, math, numpy, random, time, copy
-from pygame.locals import * 
+from pygame.locals import *
 
 from constants import *
 from utils import *
@@ -26,14 +26,14 @@ from randomnavigator import *
 from mybuildpathnetwork import *
 
 pathnodes = [(100, 200), (800, 800), (100, 800), (800, 200)]
-			
-			
+
+
 nav = RandomNavigator()
-			
-			
+
+
 world = GameWorld(SEED, (1000, 1000), (1000, 1000))
 agent = Agent(AGENT, (200, 200), 0, SPEED, world)
-world.initializeTerrain([[(180, 420), (360, 275), (680, 371), (630, 660), (380, 697)]]) 
+world.initializeTerrain([[(180, 420), (360, 275), (680, 371), (630, 660), (380, 697)]], (255, 0, 0), 2, None)
 world.setPlayerAgent(agent)
 nav.setWorld(world)
 agent.setNavigator(nav)
