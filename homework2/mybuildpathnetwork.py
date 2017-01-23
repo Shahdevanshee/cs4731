@@ -29,14 +29,32 @@ def myBuildPathNetwork(pathnodes, world, agent = None):
     ### YOUR CODE GOES BELOW HERE ###
     # https://github.gatech.edu/rmendes3/4731_1/blob/master/randomgridnavigator.py
     # https://github.gatech.edu/ywang438/gameAI/blob/master/mycreatepathnetwork.py
+    print pathnodes
     for i, item in enumerate(pathnodes):
+        print '-------- pathnode[' + str(i) + '] --------'
+        for j, obstacle in enumerate(world.getObstacles()):
+            print '-- obstacle ' + str(j) + ' --'
+            append_flag = True
+            if i == len(pathnodes) - 1:
+                if rayTraceWorld(pathnodes[i], pathnodes[0], obstacle.getLines()) is not None:
+                    append_flag = False
+            else:
+                if rayTraceWorld(pathnodes[i], pathnodes[i + 1], obstacle.getLines()) is not None:
+                    append_flag = False
+                    print pathnodes[i]
+                    print pathnodes[i + 1]
+                    print rayTraceWorld(pathnodes[i], pathnodes[i + 1], obstacle.getLines())
+            if append_flag and i == len(pathnodes) - 1 and j == len(world.getObstacles()) - 1:
+                lines.append((pathnodes[i], pathnodes[0]))
+            elif append_flag and j == len(world.getObstacles()) - 1:
+                lines.append((pathnodes[i], pathnodes[i + 1]))
         # print i
-        print item
+        # print item
         # print agent.getRadius()
         # print agent.getMaxRadius()
-        if i == len(pathnodes) - 1:
-            lines.append((pathnodes[i], pathnodes[0]))
-        else:
-            lines.append((pathnodes[i], pathnodes[i + 1]))
+        # if i == len(pathnodes) - 1:
+        #     lines.append((pathnodes[i], pathnodes[0]))
+        # else:
+        #     lines.append((pathnodes[i], pathnodes[i + 1]))
     ### YOUR CODE GOES ABOVE HERE ###
     return lines
