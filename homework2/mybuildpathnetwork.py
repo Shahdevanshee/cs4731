@@ -27,34 +27,33 @@ from core import *
 def myBuildPathNetwork(pathnodes, world, agent = None):
     lines = []
     ### YOUR CODE GOES BELOW HERE ###
-    # https://github.gatech.edu/rmendes3/4731_1/blob/master/randomgridnavigator.py
-    # https://github.gatech.edu/ywang438/gameAI/blob/master/mycreatepathnetwork.py
-    print pathnodes
-    for i, item in enumerate(pathnodes):
-        print '-------- pathnode[' + str(i) + '] --------'
-        for j, obstacle in enumerate(world.getObstacles()):
-            print '-- obstacle ' + str(j) + ' --'
-            append_flag = True
-            if i == len(pathnodes) - 1:
-                if rayTraceWorld(pathnodes[i], pathnodes[0], obstacle.getLines()) is not None:
-                    append_flag = False
-            else:
-                if rayTraceWorld(pathnodes[i], pathnodes[i + 1], obstacle.getLines()) is not None:
-                    append_flag = False
-                    print pathnodes[i]
-                    print pathnodes[i + 1]
-                    print rayTraceWorld(pathnodes[i], pathnodes[i + 1], obstacle.getLines())
-            if append_flag and i == len(pathnodes) - 1 and j == len(world.getObstacles()) - 1:
-                lines.append((pathnodes[i], pathnodes[0]))
-            elif append_flag and j == len(world.getObstacles()) - 1:
-                lines.append((pathnodes[i], pathnodes[i + 1]))
-        # print i
-        # print item
-        # print agent.getRadius()
-        # print agent.getMaxRadius()
-        # if i == len(pathnodes) - 1:
-        #     lines.append((pathnodes[i], pathnodes[0]))
-        # else:
-        #     lines.append((pathnodes[i], pathnodes[i + 1]))
+
+    # Append all possible lines to lines array
+    for i in range(len(pathnodes)):
+        for j in range(len(pathnodes)):
+            # Limit number of responses so we have new instead of repeats
+            if j > i:
+                append_flag = True
+                for obstacle in world.getObstacles():
+                    if rayTraceWorld(pathnodes[i], pathnodes[j], obstacle.getLines()) is not None:
+                        append_flag = False
+                # Append only if no intersection
+                if append_flag:
+                    lines.append((pathnodes[i], pathnodes[j]))
+
+    # Get list of points that make up obstacles
+    corners = []
+    for obstacle in world.getObstacles():
+        for point in obstacle.getPoints():
+            corners.append(point)
+
+    # Checking min_dist
+    for line in lines:
+        for corner in corners:
+            # print minimumDistance(line, corner), line, corner
+            if minimumDistance(line, corner) < agent.getMaxRadius():
+                if line in lines:
+                    lines.remove(line)
+
     ### YOUR CODE GOES ABOVE HERE ###
     return lines
