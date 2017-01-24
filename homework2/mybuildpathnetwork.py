@@ -48,12 +48,16 @@ def myBuildPathNetwork(pathnodes, world, agent = None):
             corners.append(point)
 
     # Checking min_dist
+    bad_lines = []
     for line in lines:
         for corner in corners:
-            # print minimumDistance(line, corner), line, corner
             if minimumDistance(line, corner) < agent.getMaxRadius():
-                if line in lines:
-                    lines.remove(line)
+                bad_lines.append(line)
+
+    # Remove bad lines
+    for line in bad_lines:
+        if line in lines:
+            lines.remove(line)
 
     ### YOUR CODE GOES ABOVE HERE ###
     return lines
