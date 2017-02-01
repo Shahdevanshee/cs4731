@@ -24,7 +24,6 @@ from utils import *
 from core import *
 
 # Creates a pathnode network that connects the midpoints of each navmesh together
-'''
 def myCreatePathNetwork(world, agent = None):
     nodes = []
     edges = []
@@ -35,9 +34,75 @@ def myCreatePathNetwork(world, agent = None):
     obstacles = world.getObstacles()
     print points
     print lines
+    temp = []
+    for p1 in points:
+        for p2 in points:
+            if p1 == p2:
+                continue
+            if isValid(lines, p1, p2):
+                for p3 in points:
+                    if p1 == p3 or p2 == p3:
+                        continue
+                    print isValid(lines, p1, p3) and isValid(lines, p2, p3)
+                    if isValid(lines, p1, p3) and isValid(lines, p2, p3):
+                        temp.append(list((p1, p2, p3)))
 
-    poly_lines = []
+    # Get rid of duplicates
+    for t in temp:
+        t.sort()
+        if t not in polys:
+            polys.append(t)
 
+    # Get rid of polys with obstacles connected pt. 1
+    # Problematic for runrandomnavigator2.py
+    temp = []
+    for p in polys:
+        if not validPoly(obstacles, p[0], p[1]):
+            continue
+        if not validPoly(obstacles, p[0], p[2]):
+            continue
+        if not validPoly(obstacles, p[1], p[2]):
+            continue
+        temp.append(p)
+
+    # Reassign polys correct values
+    polys = temp
+
+    print len(polys)
+    for p in polys:
+        print p
+        if (0, 0) not in p:
+            continue
+        drawPolygon(p, world.debug, color=(0,0,0), width=5, center=False)
+
+    return nodes, edges, polys
+
+def isValid(lines, p1, p2):
+    # print rayTraceWorld(p1, p2, obstacle.getLines())
+    if rayTraceWorldNoEndPoints(p1, p2, lines) is not None:
+        return False
+    return True
+
+def validPoly(obstacles, p1, p2):
+    midpoint_x = (p1[0] + p2[0]) / 2
+    midpoint_y = (p1[1] + p2[1]) / 2
+    for obstacle in obstacles:
+        if pointInsidePolygonLines((midpoint_x, midpoint_y), obstacle.getLines()):
+            return False
+    return True
+
+    # triangle = [points[0], points[1], points[2]]
+    # drawPolygon(triangle, world.debug, color=(0, 0, 0), width=1, center=False)
+    # mid = lambda (x1, y1), (x2, y2): ((x1 + x2) / 2.0, (y1 + y2) / 2.0)
+    # drawCross(world.debug, mid(points[0], points[1]))
+    # drawCross(world.debug, mid(points[0], points[2]))
+    # drawCross(world.debug, mid(points[2], points[1]))
+    # for obstacle in obstacles:
+    #     print pointInsidePolygonPoints(mid(points[0], points[1]), obstacle.getPoints())
+    #     print pointInsidePolygonPoints(mid(points[0], points[2]), obstacle.getPoints())
+    #     print pointInsidePolygonPoints(mid(points[2], points[1]), obstacle.getPoints())
+    # poly_lines = []
+    '''
     for p1 in points:
         for p2 in points:
             if p1 == p2:
@@ -144,6 +209,7 @@ def myCreatePathNetwork(world, agent = None):
 
                 polys.append((p1, p2, p3))
     '''
+    # return nodes, edges, polys
     ############################################################################
     # https://github.gatech.edu/whamrick3/homework2---navigation-mesh--path-network/blob/master/mycreatepathnetwork.py
     # https://github.gatech.edu/ywang438/gameAI/blob/master/mycreatepathnetwork.py
@@ -310,6 +376,7 @@ def myCreatePathNetwork(world, agent = None):
     ### YOUR CODE GOES ABOVE HERE ###
     # return nodes, edges, polys
 # Creates a pathnode network that connects the midpoints of each navmesh together
+'''
 def myCreatePathNetwork(world, agent = None):
     nodes = []
     edges = []
@@ -430,3 +497,4 @@ def checkTriangle(world, point1, point2, point3):
             if pointInsidePolygonPoints(point, temp_list):
                 return_list.append(temp_list)
     return return_list
+'''
