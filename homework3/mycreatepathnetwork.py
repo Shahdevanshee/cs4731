@@ -35,6 +35,8 @@ def myCreatePathNetwork(world, agent = None):
     print points
     print lines
     ############################################################################
+    # https://github.gatech.edu/whamrick3/homework2---navigation-mesh--path-network/blob/master/mycreatepathnetwork.py
+    # https://github.gatech.edu/ywang438/gameAI/blob/master/mycreatepathnetwork.py
     # drawCross(world.debug, (300, 515))
     pip_flag = True
     rt_flag = True
