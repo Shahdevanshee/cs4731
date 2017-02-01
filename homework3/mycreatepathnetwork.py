@@ -34,10 +34,119 @@ def myCreatePathNetwork(world, agent = None):
     obstacles = world.getObstacles()
     print points
     print lines
+
+    poly_lines = []
+
+    for p1 in points:
+        for p2 in points:
+            if p1 == p2:
+                continue
+
+            pip_flag = False
+            mid = lambda (x1, y1), (x2, y2): ((x1 + x2) / 2.0, (y1 + y2) / 2.0)
+            for obstacle in obstacles:
+                if pointInsidePolygonPoints(mid(p1, p2), obstacle.getPoints()):
+                    pip_flag = True
+            if pip_flag:
+                continue
+
+            rt_flag = False
+            for line in lines:
+                if p1 in line or p2 in line:
+                    continue
+                inter = rayTrace(p1, p2, line)
+                if inter is None:
+                    continue
+                else:
+                    rt_flag = True
+            if rt_flag:
+                continue
+
+            for p3 in points:
+                if p1 == p3 or p2 == p3:
+                    continue
+
+                pip_flag_2 = False
+                for obstacle in obstacles:
+                    if pointInsidePolygonPoints(mid(p1, p3), obstacle.getPoints()):
+                        pip_flag_2 = True
+                if pip_flag_2:
+                    continue
+
+                pip_flag_3 = False
+                for obstacle in obstacles:
+                    if pointInsidePolygonPoints(mid(p2, p3), obstacle.getPoints()):
+                        pip_flag_3 = True
+                if pip_flag_3:
+                    continue
+
+                rt_flag_2 = False
+                for line in lines:
+                    if p1 in line or p3 in line:
+                        continue
+                    inter = rayTrace(p1, p3, line)
+                    if inter is None:
+                        continue
+                    else:
+                        rt_flag_2 = True
+                if rt_flag_2:
+                    continue
+
+                rt_flag_3 = False
+                for line in lines:
+                    if p2 in line or p3 in line:
+                        continue
+                    inter = rayTrace(p2, p3, line)
+                    if inter is None:
+                        continue
+                    else:
+                        rt_flag_3 = True
+                if rt_flag_3:
+                    continue
+
+                rt_flag_4 = False
+                for line in poly_lines:
+                    if p1 in line or p2 in line:
+                        continue
+                    inter = rayTrace(p1, p2, line)
+                    if inter is None:
+                        continue
+                    else:
+                        rt_flag_4 = True
+                if rt_flag_4:
+                    continue
+
+                rt_flag_5 = False
+                for line in poly_lines:
+                    if p1 in line or p3 in line:
+                        continue
+                    inter = rayTrace(p1, p3, line)
+                    if inter is None:
+                        continue
+                    else:
+                        rt_flag_5 = True
+                if rt_flag_5:
+                    continue
+
+
+                rt_flag_6 = False
+                for line in poly_lines:
+                    if p2 in line or p3 in line:
+                        continue
+                    inter = rayTrace(p2, p3, line)
+                    if inter is None:
+                        continue
+                    else:
+                        rt_flag_6 = True
+                if rt_flag_6:
+                    continue
+
+                polys.append((p1, p2, p3))
     ############################################################################
     # https://github.gatech.edu/whamrick3/homework2---navigation-mesh--path-network/blob/master/mycreatepathnetwork.py
     # https://github.gatech.edu/ywang438/gameAI/blob/master/mycreatepathnetwork.py
     # drawCross(world.debug, (300, 515))
+    '''
     pip_flag = True
     rt_flag = True
     for obstacle in obstacles:
@@ -156,6 +265,7 @@ def myCreatePathNetwork(world, agent = None):
 
     # drawPolygon(p, world.debug, color=(255, 0, 0), width=4, center=False)
     print len(polys)
+    '''
 
     ############################################################################
     ############################################################################
