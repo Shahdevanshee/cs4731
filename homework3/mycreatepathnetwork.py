@@ -39,17 +39,21 @@ def myCreatePathNetwork(world, agent = None):
     pip_flag = True
     rt_flag = True
     for obstacle in obstacles:
+        print '\n'
         print obstacle.getPoints()
+        print '\n'
         # print points[2], points[len(points) - 3]
-        if rayTraceWorld(points[0], points[len(points) - 3], obstacle.getLines()) is not None:
-            rt_flag = False
-    print rt_flag
+    #     if rayTraceWorld(points[0], points[len(points) - 3], obstacle.getLines()) is not None:
+    #         rt_flag = False
+    # print rt_flag
     ############################################################################
     ###pip_flag#################################################################
-        # for point in obstacle.getPoints():
-            # print not pointInsidePolygonPoints(point, [points[4], points[1], points[2]])
-    #         if not pointInsidePolygonPoints(point, [points[4], points[1], points[2]]):
-    #             pip_flag = False
+        for point in obstacle.getPoints():
+            print 'point:', point
+            print pointInsidePolygonPoints(point, [(0, 0), (1224, 900), (811, 396)])
+            if pointInsidePolygonPoints(point, [(0, 0), (1224, 900), (811, 396)]) and point != (0, 0) and point != (811, 396) and point != (1224, 900):
+                pip_flag = False
+    print 'finally: ', pip_flag
     # if pip_flag:
     #     print pip_flag
     #     print not pointInsidePolygonPoints(point, [points[4], points[1], points[2]])
@@ -57,49 +61,98 @@ def myCreatePathNetwork(world, agent = None):
     #     polys.append([points[4], points[1], points[2]])
     ###pip_flag#################################################################
     ############################################################################
-    for point1 in points:
-        for point2 in points:
-            for point3 in points:
-                if point1 == point2 or point1 == point3 or point2 == point3:
-                    continue
-                # Making it a triangle
-                triangle = [point1, point2, point3]
-                rt_flag = True
-                pip_flag = True
-                for obstacle in obstacles:
-                    if rayTraceWorldNoEndPoints(point1, point2, obstacle.getLines()) is not None or rayTraceWorldNoEndPoints(point1, point3, obstacle.getLines()) is not None or rayTraceWorldNoEndPoints(point2, point3, obstacle.getLines()) is not None:
-                        rt_flag = False
-                    # if point1 in obstacle.getPoints() and point2 in obstacle.getPoints() and point3 in obstacle.getPoints():
-                    #     rt_flag = False
+    for i in range(len(points)):
+        for j in range(len(points)):
+            for k in range(len(points)):
+                # if i == j or i == k or j == k:
+                #     continue
+                if j > i and k > j:
+                    # Making it a triangle
+                    triangle = [points[i], points[j], points[k]]
 
-                #     for obst_point in obstacle.getPoints():
-                #         print (triangle, obst_point, pointInsidePolygonPoints(obst_point, triangle))
-                #         if pointInsidePolygonPoints(obst_point, triangle):
-                #             pip_flag = False
-                # print (rt_flag, pip_flag)
+                    rt_flag = True
+                    for obstacle in obstacles:
+                        if rayTraceWorldNoEndPoints(points[i], points[j], lines) is not None or rayTraceWorldNoEndPoints(points[i], points[k], lines) is not None or rayTraceWorldNoEndPoints(points[j], points[k], lines) is not None:
+                            rt_flag = False
 
-                if rt_flag and pip_flag:
-                    polys.append(triangle)
-    print '\npolys:'
+                    if rt_flag:
+                        polys.append(triangle)
+
+                    # pip_flag = True
+                    # for obstacle in obstacles:
+                    #     for point in obstacle.getPoints():
+                    #         if triangle in polys:
+                    #             if pointInsidePolygonPoints(point, triangle) and point != triangle[0] and point != triangle[1] and point != triangle[2]:
+                    #                 pip_flag = False
+                    # print pip_flag
+
+                    # for triangle in polys:
+
+                        # if pointInsidePolygonLines(triangle[0], obstacle.getLines()) and or pointInsidePolygonLines(triangle[1], obstacle.getLines()) or pointInsidePolygonLines(triangle[2], obstacle.getLines()):
+                    #         pip_flag = False
+                        # for obst_point in obstacle.getPoints():
+                        #     print (triangle, obst_point, pointInsidePolygonPoints(obst_point, triangle))
+                        #     if triangle[0] == obst_point or triangle[1] == obst_point or triangle[2] == obst_point:
+                        #         continue
+                        #     if pointInsidePolygonPoints(obst_point, triangle):
+                        #         pip_flag = False
+                    # if pip_flag:
+                    #     print triangle
+                    #     drawPolygon(triangle, world.debug, color=(0, 0, 0), width=10, center=False)
+    temp = []
+
     for poly in polys:
-        if (1224, 0) in poly:
-            continue
-        if (0, 0) in poly:
-            continue
-        if (1224, 900) in poly:
-            continue
-        if (0, 900) in poly:
-            continue
+        print poly
+        pip_flag = True
+        for obstacle in obstacles:
+            for obst_point in obstacle.getPoints():
+                print obst_point, pointInsidePolygonPoints(obst_point, poly) and obst_point != poly[0] and obst_point != poly[1] and obst_point != poly[2]
+                if pointInsidePolygonPoints(obst_point, poly) and obst_point != poly[0] and obst_point != poly[1] and obst_point != poly[2]:
+                    pip_flag = False
+        print 'pip_flag', pip_flag, '\n'
+        if pip_flag:
+            temp.append(poly)
+    print '\ntemp\n'
+    polys = temp
+    # poly = []
+    # for item in temp:
+    #     poly.append(item)
+    # for item in poly:
+    #     print item
+
+
+
+
+    print '\npolys:'
+    # for poly in polys:
+        # if (1224, 0) in poly:
+        #     continue
+        # if (0, 0) not in poly:
+        #     continue
+        # if (1224, 900) not in poly:
+        #     continue
+        # if (0, 900) in poly:
+        #     continue
         # if (628, 698) not in poly:
         #     continue
-        # if (582, 717) not in poly:
-            # continue
+        # if (554, 566) not in poly:
+        #     continue
+        # if (942, 484) not in poly:
+        #     continue
+        # if (811, 396) not in poly:
+        #     continue
         # print poly
+    drawPolygon([(0, 0), (1224, 900), (811, 396)], world.debug, color=(0, 0, 0), width=10, center=False)
     # drawCross(world.debug, (628, 698))
     # drawCross(world.debug, (582, 717))
     # drawCross(world.debug, (549, 688))
     # drawCross(world.debug, (554, 566))
     # drawCross(world.debug, (676, 548))
+    # drawPolygon(poly, screen, color = (0, 0, 0), width = 1, center = False):
+    # p = [(0, 900), (381, 490), (811, 396)]
+
+
+    # drawPolygon(p, world.debug, color=(255, 0, 0), width=4, center=False)
     print len(polys)
 
     ############################################################################
