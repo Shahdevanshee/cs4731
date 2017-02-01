@@ -24,6 +24,7 @@ from utils import *
 from core import *
 
 # Creates a pathnode network that connects the midpoints of each navmesh together
+'''
 def myCreatePathNetwork(world, agent = None):
     nodes = []
     edges = []
@@ -142,11 +143,12 @@ def myCreatePathNetwork(world, agent = None):
                     continue
 
                 polys.append((p1, p2, p3))
+    '''
     ############################################################################
     # https://github.gatech.edu/whamrick3/homework2---navigation-mesh--path-network/blob/master/mycreatepathnetwork.py
     # https://github.gatech.edu/ywang438/gameAI/blob/master/mycreatepathnetwork.py
     # drawCross(world.debug, (300, 515))
-    '''
+'''
     pip_flag = True
     rt_flag = True
     for obstacle in obstacles:
@@ -306,8 +308,119 @@ def myCreatePathNetwork(world, agent = None):
     #             print obstacle
     # polys.append(list_mine)
     ### YOUR CODE GOES ABOVE HERE ###
+    # return nodes, edges, polys
+# Creates a pathnode network that connects the midpoints of each navmesh together
+def myCreatePathNetwork(world, agent = None):
+    nodes = []
+    edges = []
+    polys = []
+    # ## YOUR CODE GOES BELOW HERE ###
+    polys = findTriangles(world)
+    polys = mergePolys(polys)
+    for poly in polys:
+        drawPolygon(poly, world.debug, (255, 0, 0), 1, True)
+
+
+    ### YOUR CODE GOES ABOVE HERE ###
     return nodes, edges, polys
 
+def findTriangles(world):
+    obstacles = world.getObstacles()
+    lines = world.getLines()
+    points = world.getPoints()
+    print points
+
+    polylines = []
+    polys = []
+    ## find convex hulls ##
+    # find triangles #
+    for p1 in world.getPoints():
+        for p2 in world.getPoints():
+            if p1 == p2: continue
+            if checkWithinObstacle(p1, p2, obstacles):
+                print 0
+                continue
+            if crossExceptCorner(p1, p2, lines):
+                print 1
+                continue
+            for p3 in world.getPoints():
+                if p1 == p3 or p2 == p3: continue
+                #make sure that the three formed lines are not within an obstacle
+                if checkWithinObstacle(p3, p2, obstacles) or checkWithinObstacle(p3, p1, obstacles):
+                    print 0
+                    continue
+                #not cross any existing lines
+                if crossExceptCorner(p1, p3, lines) or crossExceptCorner(p2, p3, lines):
+                    #drawPolygon([p1,p2,p3], world.debug, (255,0,0), 1, False)
+                    print 1
+                    continue
+                #not cross any formed polygon/triangles
+                if crossExceptCorner(p1, p2, polylines) or crossExceptCorner(p1, p3, polylines) or crossExceptCorner(p2, p3, polylines):
+                    print 2
+                    continue
+                # #no obstacles within the triangle
+                # flag3 = True
+                # for point in points:
+                #   if pointInsidePolygonPoints(point,(p1,p2,p3)):
+                #       flag3 = False
+                #       break
+                # if flag3==False:
+                #   print 3
+                #   continue
+                #add triangle
+                polys.append((p1, p2, p3))
+                polylines += [(p1, p2), (p2, p3), (p1, p3)]
+            #drawPolygon([p1,p2,p3], world.debug, (0,255,0), 1, True)
+    return polys
+
+def mergePolys(polys):
+    print len(polys)
+    while True:
+        size = len(polys)
+        for poly1 in polys:
+            flag = False
+            for poly2 in polys:
+                if poly2 == poly1: continue
+                points = polygonsAdjacent(poly1, poly2)
+                if points != False:
+                    merged = list(set(list(poly1) + list(poly2)))
+                    if isConvex(merged):
+                        print (poly1, poly2)
+                        polys.remove(poly1)
+                        polys.remove(poly2)
+                        polys.append(tuple(merged))
+                        flag = True
+                        break
+            if flag == True:
+                break
+
+        if size == len(polys):
+            break
+    print len(polys)
+    return polys
+
+# Returns True if any of the formed lines are within an obstacle
+def checkWithinObstacle(p1, p2, obstacles):
+    mid = lambda (x1, y1), (x2, y2): ((x1 + x2) / 2.0, (y1 + y2) / 2.0);
+    for obstacle in obstacles:
+        if pointInsidePolygonPoints(mid(p1, p2), obstacle.getPoints()):
+            return True
+
+    return False
+
+#Returns True if the line(p1,p2) crosses one of the lines at intermediate point
+def crossExceptCorner(p1, p2, lines):
+    for (p3, p4) in lines:
+        if p1 in (p3, p4) or p2 in (p3, p4):
+            continue
+        inter = calculateIntersectPoint(p1, p2, p3, p4)
+        if inter == None:
+            continue
+        else:
+            # print (p1,p2,p3,p4)
+            # print (inter)
+            return True
+    return False
 
 def checkTriangle(world, point1, point2, point3):
     return_list = []
