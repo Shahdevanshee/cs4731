@@ -43,7 +43,7 @@ def myCreatePathNetwork(world, agent = None):
                 for p3 in points:
                     if p1 == p3 or p2 == p3:
                         continue
-                    print isValid(lines, p1, p3) and isValid(lines, p2, p3)
+                    # print isValid(lines, p1, p3) and isValid(lines, p2, p3)
                     if isValid(lines, p1, p3) and isValid(lines, p2, p3):
                         temp.append(list((p1, p2, p3)))
 
@@ -69,11 +69,38 @@ def myCreatePathNetwork(world, agent = None):
     polys = temp
 
     print len(polys)
+    rem_list = []
     for p in polys:
-        print p
-        if (0, 0) not in p:
+        print '\npoly: ---> ', p
+        for obstacle in obstacles:
+            print '\n', obstacle.getPoints()
+            count = 0
+            for pt in obstacle.getPoints():
+                print pointInsidePolygonPoints(pt, p)
+                if not pointInsidePolygonPoints(pt, p):
+                    continue
+                else:
+                    count += 1
+            if count == len(obstacle.getPoints()):
+                rem_list.append(p)
+
+        # if (0, 0) not in p:
+        #     continue
+        # if (921, 300) not in p:
+        #     continue
+        # if (1224, 900) not in p:
+        #     continue
+        # drawPolygon(p, world.debug, color=(0,0,0), width=5, center=False)
+
+    print len(rem_list)
+    for rem in rem_list:
+        print rem
+        if (0, 0) not in rem:
             continue
-        drawPolygon(p, world.debug, color=(0,0,0), width=5, center=False)
+        if (300, 515) not in rem:
+            continue
+        drawPolygon(rem, world.debug, color=(0,0,0), width=5, center=False)
+        # polys.remove(rem)
 
     return nodes, edges, polys
 
