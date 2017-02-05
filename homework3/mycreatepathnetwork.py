@@ -40,13 +40,25 @@ def myCreatePathNetwork(world, agent = None):
                 if not checkCollision1(world, temp, p1, p2, p3) and not checkCollision2(world, obstacles, temp, p1, p2, p3):
                     temp.append(list((p1, p2, p3)))
 
-
-
     # Get rid of duplicates
     for t in temp:
         t.sort()
         if t not in polys:
             polys.append(t)
+
+    for p1 in polys:
+        for p2 in polys:
+            if p1 == p2:
+                continue
+            if polygonsAdjacent(p1, p2):
+                print p1, p2
+                merged = merge(p1, p2)
+                print 'merged: ', merged
+                if isConvex(merged):
+                    # drawPolygon(merged, world.debug, (0,0,0), 10, False)
+                    polys.remove(p1)
+                    polys.remove(p2)
+                    polys.append(merged)
 
     print len(polys)
     for p in polys:
@@ -152,7 +164,6 @@ def checkCollision2(world, obstacles, polys, p1, p2, p3):
         #
         # midpoint[0] /= len(obstacle.getPoints())
         # midpoint[1] /= len(obstacle.getPoints())
-        # drawCross(world.debug, (midpoint[0], midpoint[1]))
         # if pointInsidePolygonPoints(midpoint, (p1, p2, p3)):
         #     return True
 
@@ -174,3 +185,13 @@ def midpt(p1, p2):
     midX = ((p1[0] + p2[0]) / 2)
     midY = ((p1[1] + p2[1]) / 2)
     return (midX, midY)
+
+
+def merge(poly1, poly2):
+    pts = []
+    for pt in poly1:
+        pts.append(pt)
+    for pt in poly2:
+        if pt not in pts:
+            pts.append(pt)
+    return pts
