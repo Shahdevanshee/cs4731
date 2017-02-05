@@ -51,14 +51,27 @@ def myCreatePathNetwork(world, agent = None):
             if p1 == p2:
                 continue
             if polygonsAdjacent(p1, p2):
-                print p1, p2
+                # print p1, p2
                 merged = merge(p1, p2)
-                print 'merged: ', merged
+                # print 'merged: ', merged
                 if isConvex(merged):
                     # drawPolygon(merged, world.debug, (0,0,0), 10, False)
                     polys.remove(p1)
                     polys.remove(p2)
                     polys.append(merged)
+
+    # for p1 in polys:
+    #     for p2 in polys:
+    #         if p1 == p2:
+    #             continue
+    #         if polygonsAdjacent(p1, p2):
+    #             common = commonPoints(p1, p2)
+    #             # print 'common points: ', commonPoints(p1, p2)
+    #             mid = midpt(common[0], common[1])
+    #             nodes.append(mid)
+    #             # drawCross(world.debug, mid)
+
+    # edges = myBuildPathNetwork(nodes, world, agent)
 
     print len(polys)
     for p in polys:
@@ -66,56 +79,6 @@ def myCreatePathNetwork(world, agent = None):
         # if (457, 422) not in p:
         #     continue
         # drawPolygon(p, world.debug, color=(0, 0, 0), width=10, center=False)
-
-
-    # Get rid of polys with obstacles connected pt. 1
-    # Problematic for runrandomnavigator2.py
-    # temp = []
-    # for p in polys:
-    #     if not validPoly(obstacles, p[0], p[1], p):
-    #         continue
-    #     elif not validPoly(obstacles, p[0], p[2], p):
-    #         continue
-    #     elif not validPoly(obstacles, p[1], p[2], p):
-    #         continue
-    #     temp.append(p)
-
-    # Reassign polys correct values
-    # polys = temp
-
-    # print len(polys)
-    # rem_list = []
-    # for p in polys:
-    #     print '\npoly: ---> ', p
-    #     for obstacle in obstacles:
-    #         print '\n', obstacle.getPoints()
-    #         count = 0
-    #         for pt in obstacle.getPoints():
-    #             print pointInsidePolygonPoints(pt, p)
-    #             if not pointInsidePolygonPoints(pt, p):
-    #                 continue
-    #             else:
-    #                 count += 1
-    #         if count == len(obstacle.getPoints()):
-    #             rem_list.append(p)
-
-        # if (0, 0) not in p:
-        #     continue
-        # if (921, 300) not in p:
-        #     continue
-        # if (1224, 900) not in p:
-        #     continue
-        # drawPolygon(p, world.debug, color=(0,0,0), width=5, center=False)
-
-    # print len(rem_list)
-    # for rem in rem_list:
-        # print rem
-        # if (0, 0) not in rem:
-        #     continue
-        # if (300, 515) not in rem:
-        #     continue
-        # drawPolygon(rem, world.debug, color=(0,0,0), width=5, center=False)
-        # polys.remove(rem)
 
     return nodes, edges, polys
 
@@ -148,6 +111,7 @@ def checkCollision2(world, obstacles, polys, p1, p2, p3):
         mid1 = midpt(p2, p3)
         mid2 = midpt(p1, p2)
         mid3 = midpt(p1, p3)
+
         # Check our triangle inside any of the pre-made obstacles
         if pointInsidePolygonLines(mid1, obstacle.getLines()) and (p2, p3) not in lines and (p3, p2) not in lines:
             return True
@@ -157,26 +121,20 @@ def checkCollision2(world, obstacles, polys, p1, p2, p3):
             return True
 
         # Check pre-made obstacles inside our triangle
-        # midpoint = [0,0]
-        # for point in obstacle.getPoints():
-        #     midpoint[0] += point[0]
-        #     midpoint[1] += point[1]
-        #
-        # midpoint[0] /= len(obstacle.getPoints())
-        # midpoint[1] /= len(obstacle.getPoints())
-        # if pointInsidePolygonPoints(midpoint, (p1, p2, p3)):
-        #     return True
+        pts = obstacle.getPoints()
 
-        # Check pre-made obstacles inside our triangle
-        for x in range(len(obstacle.getPoints())):
-            pt1 = obstacle.getPoints()[x]
-            if x == len(obstacle.getPoints()) - 1:
-                pt2 = obstacle.getPoints()[0]
-            else:
-                pt2 = obstacle.getPoints()[x + 1]
-            mid4 = midpt(pt1, pt2)
-            if (pointInsidePolygonPoints(mid4, (p1, p2, p3))):
-                return True
+        center_x = 0
+        center_y = 0
+
+        for (x, y) in pts:
+            center_x += x
+            center_y += y
+
+        center_x /= len(pts)
+        center_y /= len(pts)
+
+        if pointInsidePolygonPoints((center_x, center_y), (p1, p2, p3)):
+            return True
 
     return False
 
@@ -194,4 +152,69 @@ def merge(poly1, poly2):
     for pt in poly2:
         if pt not in pts:
             pts.append(pt)
+
+    # http://math.stackexchange.com/questions/1329128/
+    # how-to-sort-vertices-of-a-polygon-in-counter-clockwise-order-computing-angle?noredirect=1&lq=1
+    center_x = 0
+    center_y = 0
+
+    for (x, y) in pts:
+        center_x += x
+        center_y += y
+
+    center_x /= len(pts)
+    center_y /= len(pts)
+
+    temp_dict = {}
+    temp_list = []
+
+    for (x, y) in pts:
+        angle = math.atan2(center_y - y, center_x - x)
+        temp_list.append(angle)
+        temp_dict[angle] = (x, y)
+
+    temp_list.sort()
+    pts = []
+    for item in temp_list:
+        pts.append(temp_dict[item])
+
     return pts
+
+
+def myBuildPathNetwork(pathnodes, world, agent=None):
+    lines = []
+    ### YOUR CODE GOES BELOW HERE ###
+
+    # Append all possible lines to lines array
+    for i in range(len(pathnodes)):
+        for j in range(len(pathnodes)):
+            # Limit number of responses so we have new instead of repeats
+            if j > i:
+                append_flag = True
+                for obstacle in world.getObstacles():
+                    if rayTraceWorld(pathnodes[i], pathnodes[j], obstacle.getLines()) is not None:
+                        append_flag = False
+                # Append only if no intersection
+                if append_flag:
+                    lines.append((pathnodes[i], pathnodes[j]))
+
+    # Get list of points that make up obstacles
+    corners = []
+    for obstacle in world.getObstacles():
+        for point in obstacle.getPoints():
+            corners.append(point)
+
+    # Checking min_dist
+    bad_lines = []
+    for line in lines:
+        for corner in corners:
+            if minimumDistance(line, corner) < agent.getMaxRadius():
+                bad_lines.append(line)
+
+    # Remove bad lines
+    for line in bad_lines:
+        if line in lines:
+            lines.remove(line)
+
+    ### YOUR CODE GOES ABOVE HERE ###
+    return lines
