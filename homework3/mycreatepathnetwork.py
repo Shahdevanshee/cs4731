@@ -59,26 +59,35 @@ def myCreatePathNetwork(world, agent = None):
                     polys.remove(p1)
                     polys.remove(p2)
                     polys.append(merged)
+                    break
 
-    # for p1 in polys:
-    #     for p2 in polys:
-    #         if p1 == p2:
-    #             continue
-    #         if polygonsAdjacent(p1, p2):
-    #             common = commonPoints(p1, p2)
-    #             # print 'common points: ', commonPoints(p1, p2)
-    #             mid = midpt(common[0], common[1])
-    #             nodes.append(mid)
-    #             # drawCross(world.debug, mid)
+    for p1 in polys:
+        for p2 in polys:
+            if p1 == p2:
+                continue
+            if polygonsAdjacent(p1, p2):
+                common = commonPoints(p1, p2)
+                # print 'common points: ', commonPoints(p1, p2)
+                mid = midpt(common[0], common[1])
+                if mid not in nodes:
+                    nodes.append(mid)
+                drawCross(world.debug, mid)
+
+    # for n1 in nodes:
+        # print n1
+        # for n2 in nodes:
+            # if n1 == n2:
+                # continue
+
 
     # edges = myBuildPathNetwork(nodes, world, agent)
 
-    print len(polys)
-    for p in polys:
-        print p
-        # if (457, 422) not in p:
-        #     continue
-        # drawPolygon(p, world.debug, color=(0, 0, 0), width=10, center=False)
+    # print len(polys)
+    # for p in polys:
+    #     print p
+    #     if (457, 422) not in p:
+    #         continue
+    #     drawPolygon(p, world.debug, color=(0, 0, 0), width=10, center=False)
 
     return nodes, edges, polys
 
@@ -90,11 +99,9 @@ def checkCollision1(world, polys, p1, p2, p3):
         lines.append((p[0], p[2]))
         lines.append((p[1], p[2]))
 
-    if rayTraceWorldNoEndPoints(p2, p3, lines) is not None and (p2, p3) not in lines and (p3, p2) not in lines:
-        return True
-    elif rayTraceWorldNoEndPoints(p1, p2, lines) is not None and (p1, p2) not in lines and (p2, p1) not in lines:
-        return True
-    elif rayTraceWorldNoEndPoints(p1, p3, lines) is not None and (p1, p3) not in lines and (p3, p1) not in lines:
+    if (rayTraceWorldNoEndPoints(p2, p3, lines) is not None and (p2, p3) not in lines and (p3, p2) not in lines) or \
+    (rayTraceWorldNoEndPoints(p1, p2, lines) is not None and (p1, p2) not in lines and (p2, p1) not in lines) or \
+    (rayTraceWorldNoEndPoints(p1, p3, lines) is not None and (p1, p3) not in lines and (p3, p1) not in lines):
         return True
 
     return False
@@ -113,11 +120,9 @@ def checkCollision2(world, obstacles, polys, p1, p2, p3):
         mid3 = midpt(p1, p3)
 
         # Check our triangle inside any of the pre-made obstacles
-        if pointInsidePolygonLines(mid1, obstacle.getLines()) and (p2, p3) not in lines and (p3, p2) not in lines:
-            return True
-        elif pointInsidePolygonLines(mid2, obstacle.getLines()) and (p1, p2) not in lines and (p2, p1) not in lines:
-            return True
-        elif pointInsidePolygonLines(mid3, obstacle.getLines()) and (p1, p3) not in lines and (p3, p1) not in lines:
+        if (pointInsidePolygonLines(mid1, obstacle.getLines()) and (p2, p3) not in lines and (p3, p2) not in lines) or \
+        (pointInsidePolygonLines(mid2, obstacle.getLines()) and (p1, p2) not in lines and (p2, p1) not in lines) or \
+        (pointInsidePolygonLines(mid3, obstacle.getLines()) and (p1, p3) not in lines and (p3, p1) not in lines):
             return True
 
         # Check pre-made obstacles inside our triangle
