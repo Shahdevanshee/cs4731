@@ -46,27 +46,29 @@ def myCreatePathNetwork(world, agent = None):
         if t not in polys:
             polys.append(t)
 
-    for p1 in polys:
-        for p2 in polys:
-            if p1 == p2:
-                continue
-            if polygonsAdjacent(p1, p2):
-                # print p1, p2
-                merged = merge(p1, p2)
-                # print 'merged: ', merged
-                if isConvex(merged):
-                    # drawPolygon(merged, world.debug, (0,0,0), 10, False)
-                    polys.remove(p1)
-                    polys.remove(p2)
-                    polys.append(merged)
-                    break
+    for n in range(len(polys)):
+        for p1 in polys:
+            for p2 in polys:
+                if p1 == p2:
+                    continue
+                if polygonsAdjacent(p1, p2):
+                    # print p1, p2
+                    merged = merge(p1, p2)
+                    # print 'merged: ', merged
+                    if isConvex(merged):
+                        # drawPolygon(merged, world.debug, (0,0,0), 10, False)
+                        polys.remove(p1)
+                        polys.remove(p2)
+                        polys.append(merged)
+                        break
 
     for p1 in polys:
         for p2 in polys:
             if p1 == p2:
                 continue
-            if polygonsAdjacent(p1, p2):
-                common = commonPoints(p1, p2)
+            common = polygonsAdjacent(p1, p2)
+            if common:
+                # common = commonPoints(p1, p2)
                 # print 'common points: ', commonPoints(p1, p2)
                 mid = midpt(common[0], common[1])
                 if mid not in nodes:
@@ -74,20 +76,15 @@ def myCreatePathNetwork(world, agent = None):
                 drawCross(world.debug, mid)
 
     # for n1 in nodes:
-        # print n1
+    #     print n1
         # for n2 in nodes:
             # if n1 == n2:
                 # continue
 
 
-    # edges = myBuildPathNetwork(nodes, world, agent)
-
-    # print len(polys)
-    # for p in polys:
-    #     print p
-    #     if (457, 422) not in p:
-    #         continue
-    #     drawPolygon(p, world.debug, color=(0, 0, 0), width=10, center=False)
+    edges = myBuildPathNetwork(nodes, world, agent)
+    # for edge in edges:
+    #     print edge
 
     return nodes, edges, polys
 
