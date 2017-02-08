@@ -63,6 +63,7 @@ def myCreatePathNetwork(world, agent = None):
                         break
 
     for p1 in polys:
+        temp = []
         for p2 in polys:
             if p1 == p2:
                 continue
@@ -71,10 +72,21 @@ def myCreatePathNetwork(world, agent = None):
                 # common = commonPoints(p1, p2)
                 # print 'common points: ', commonPoints(p1, p2)
                 mid = midpt(common[0], common[1])
+                temp.append(mid)
                 if mid not in nodes:
                     nodes.append(mid)
-                drawCross(world.debug, mid)
-
+                # drawCross(world.debug, mid)
+        for i in range(len(temp)):
+            if i == len(temp) - 1:
+                if checkCollision3(obstacles, temp[i], temp[0], agent):
+                    edges.append((temp[i], temp[0]))
+            else:
+                if checkCollision3(obstacles, temp[i], temp[i + 1], agent):
+                    edges.append((temp[i], temp[i + 1]))
+        # for obstacle in obstacles:
+        #     for point in obstacle.getPoints():
+        #         if minimumDistance()
+        # print temp
     # for n1 in nodes:
     #     print n1
         # for n2 in nodes:
@@ -82,7 +94,7 @@ def myCreatePathNetwork(world, agent = None):
                 # continue
 
 
-    edges = myBuildPathNetwork(nodes, world, agent)
+    # edges = myBuildPathNetwork(nodes, world, agent)
     # for edge in edges:
     #     print edge
 
@@ -139,6 +151,14 @@ def checkCollision2(world, obstacles, polys, p1, p2, p3):
             return True
 
     return False
+
+
+def checkCollision3(obstacles, temp1, temp2, agent=None):
+    for obstacle in obstacles:
+        for point in obstacle.getPoints():
+            if minimumDistance((temp1, temp2), point) <= agent.getMaxRadius():
+                return False
+    return True
 
 
 def midpt(p1, p2):
