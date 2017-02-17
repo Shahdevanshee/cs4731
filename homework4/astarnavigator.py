@@ -111,11 +111,60 @@ def astar(init, goal, network):
     open = []
     closed = []
     ### YOUR CODE GOES BELOW HERE ###
+    parent_dict = {}
+    dist_dict = {init: 0}
+    heuristic_dict = {init: dist_dict[init] + distance(init, goal)}
 
+    open.append(init)
+    while open:
+        open = sort_open(open, heuristic_dict)
+        current = open[0]
+        if current == goal:
+            print parent_dict
+            path.append(current)
+            while current in parent_dict:
+                current = parent_dict[current]
+                if current != init:
+                    path.append(current)
+            break
+
+        open.remove(current)
+        closed.append(current)
+
+        neighbors = getNeighbors(current, network)
+        for n in neighbors:
+            if n not in closed:
+                dist = dist_dict[current] + distance(current, n)
+                if n not in open or dist < dist_dict[n]:
+                    parent_dict[n] = current
+                    dist_dict[n] = dist
+                    heuristic_dict[n] = dist_dict[n] + distance(n, goal)
+                    if n not in open:
+                        open.append(n)
+    path = list(reveresed(path))
+    print 'path', path
+    print 'closed', closed
     ### YOUR CODE GOES ABOVE HERE ###
     return path, closed
 
 
+def sort_open(open, heuristic_dict):
+    resorted = []
+    for k, v in heuristic_dict:
+        if k in open:
+            resorted.append((k ,v))
+    resorted.sort(key=lambda x: x[1])
+    return resorted
+
+
+def getNeighbors(point, network):
+    neighbors = []
+    for item in network:
+        if point in item and point == item[0] and item[1] not in neighbors:
+            neighbors.append(item[1])
+        elif point in item and point == item[1] and item[0] not in neighbors:
+            neighbors.append(item[0])
+    return neighbors
 
 
 def myUpdate(nav, delta):
@@ -123,7 +172,6 @@ def myUpdate(nav, delta):
 
     ### YOUR CODE GOES ABOVE HERE ###
     return None
-
 
 
 def myCheckpoint(nav):
