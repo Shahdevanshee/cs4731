@@ -116,9 +116,15 @@ def astar(init, goal, network):
     heuristic_dict = {init: dist_dict[init] + distance(init, goal)}
 
     open.append(init)
+    print 'init', init
+    print 'goal', goal
+    print 'network', network
     while open:
+        print '-----------beginning-----------'
         open = sort_open(open, heuristic_dict)
+        print 'open', open
         current = open[0]
+        print 'current', current
         if current == goal:
             print parent_dict
             path.append(current)
@@ -141,7 +147,7 @@ def astar(init, goal, network):
                     heuristic_dict[n] = dist_dict[n] + distance(n, goal)
                     if n not in open:
                         open.append(n)
-    path = list(reveresed(path))
+    path = list(reversed(path))
     print 'path', path
     print 'closed', closed
     ### YOUR CODE GOES ABOVE HERE ###
@@ -150,10 +156,26 @@ def astar(init, goal, network):
 
 def sort_open(open, heuristic_dict):
     resorted = []
-    for k, v in heuristic_dict:
-        if k in open:
-            resorted.append((k ,v))
-    resorted.sort(key=lambda x: x[1])
+    temp = []
+    for item in open:
+        print 'item', item
+        print 'heuristic_dict['+str(item)+']', heuristic_dict[item]
+        temp.append((item, heuristic_dict[item]))
+
+    # print 'heuristic_dict', heuristic_dict
+    # for k, v in heuristic_dict.iteritems():
+    #     print 'k', k
+    #     print ('k in open', k in open)
+    #     if k in open:
+    #         temp.append((k ,v))
+    # print 'temp', temp[0][1]
+    print 'open', open
+    temp.sort(key=lambda x: x[0])
+    for item in temp:
+        # print item[0]
+        resorted.append(item[0])
+    print 'resorted', resorted
+    # print '--------------------'
     return resorted
 
 
