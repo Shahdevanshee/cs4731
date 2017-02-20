@@ -104,8 +104,6 @@ def unobstructedNetwork(network, worldLines):
     return newnetwork
 
 
-
-
 def astar(init, goal, network):
     path = []
     open = []
@@ -114,42 +112,41 @@ def astar(init, goal, network):
     parent_dict = {}
     dist_dict = {init: 0}
     heuristic_dict = {init: dist_dict[init] + distance(init, goal)}
-
     open.append(init)
-    print 'init', init
-    print 'goal', goal
-    print 'network', network
+
     while open:
-        print '-----------beginning-----------'
         open = sort_open(open, heuristic_dict)
-        print 'open', open
         current = open[0]
-        print 'current', current
-        if current == goal:
-            print parent_dict
+
+        if current != goal:
+            open.remove(current)
+            closed.append(current)
+
+            neighbors = getNeighbors(current, network)
+            for n in neighbors:
+                if n not in closed:
+                    dist = dist_dict[current] + distance(current, n)
+                    if n not in open or dist < dist_dict[n]:
+                        parent_dict[n] = current
+                        dist_dict[n] = dist
+                        heuristic_dict[n] = dist_dict[n] + distance(n, goal)
+                        if n not in open:
+                            open.append(n)
+
+        else:
             path.append(current)
             while current in parent_dict:
                 current = parent_dict[current]
-                if current != init:
-                    path.append(current)
+                if current == init:
+                    continue
+                else:
+                    path = [current] + path
+
+            path = [init] + path
             break
 
-        open.remove(current)
-        closed.append(current)
 
-        neighbors = getNeighbors(current, network)
-        for n in neighbors:
-            if n not in closed:
-                dist = dist_dict[current] + distance(current, n)
-                if n not in open or dist < dist_dict[n]:
-                    parent_dict[n] = current
-                    dist_dict[n] = dist
-                    heuristic_dict[n] = dist_dict[n] + distance(n, goal)
-                    if n not in open:
-                        open.append(n)
-    path = list(reversed(path))
-    print 'path', path
-    print 'closed', closed
+
     ### YOUR CODE GOES ABOVE HERE ###
     return path, closed
 
@@ -158,24 +155,11 @@ def sort_open(open, heuristic_dict):
     resorted = []
     temp = []
     for item in open:
-        print 'item', item
-        print 'heuristic_dict['+str(item)+']', heuristic_dict[item]
         temp.append((item, heuristic_dict[item]))
 
-    # print 'heuristic_dict', heuristic_dict
-    # for k, v in heuristic_dict.iteritems():
-    #     print 'k', k
-    #     print ('k in open', k in open)
-    #     if k in open:
-    #         temp.append((k ,v))
-    # print 'temp', temp[0][1]
-    print 'open', open
-    temp.sort(key=lambda x: x[0])
+    temp.sort(key=lambda x: x[1])
     for item in temp:
-        # print item[0]
         resorted.append(item[0])
-    print 'resorted', resorted
-    # print '--------------------'
     return resorted
 
 
@@ -191,13 +175,63 @@ def getNeighbors(point, network):
 
 def myUpdate(nav, delta):
     ### YOUR CODE GOES BELOW HERE ###
-
+    # print nav.world.getGates()
+    # gates = nav.world.getGates()
+    # print 'targets', nav.agent.targets
+    # for gate in gates:
+        # if minimumDistance(gate, nav.world.getAgent().getLocation()) > nav.world.getAgent().getMaxRadius():
+            # nav.world.getAgent().stopMoving()
+            # nav.setPath(None)
+    # if nav.path is not None:
+            # nav.computePath(nav.world.getAgent().getLocation(), nav.getDestination())
     ### YOUR CODE GOES ABOVE HERE ###
     return None
 
 
 def myCheckpoint(nav):
     ### YOUR CODE GOES BELOW HERE ###
+    print nav.path
+    # nav.computePath(nav.world.getAgent().getLocation(), nav.getDestination())
+    gates = nav.world.getGates()
+    # target = nav.world.getAgent().getMoveTarget()
+    for gate in gates:
+    #     print nav.world.getAgent().getLocation()
+    #     print nav.getDestination()
+    #     print gate
+    #     print nav.agent.targets
+        if len(nav.path) > 0 and rayTrace(nav.path[0], nav.getDestination(), gate) is not None:
+            # nav.computePath(nav.world.getAgent().getLocation(), nav.getDestination())
+        # else:
+            # nav.world.getAgent().stopMoving()
+            closest = findClosestUnobstructed(nav.path[0], nav.pathnodes, nav.world.getLinesWithoutBorders())
+            if closest is None:
+                # closest = close_list[len(close_list) - 1]
+                nav.world.getAgent().stopMoving()
+                # nav.world.getAgent().setPath(None)
+            # print '1', closest
+            # print '2', nav.world.getAgent().getLocation()
+            # print '3', close_list
+            else:
+                nav.computePath(nav.world.getAgent().getLocation(), closest)
+    #         dest = None
+    #         if len(nav.agent.targets) > 0:
+    #             for t in nav.agent.targets:
+    #                 if rayTrace(nav.world.getAgent().getLocation(), t, gate) is None:
+    #                     dest = t
+    #                     break
+            # if dest is not None:
+                # nav.world.getAgent().navigateTo(nav.agent.targets[0])
+                # nav.world.getAgent().navigateTo(dest)
+                # nav.computePath(nav.world.getAgent().getLocation(), dest)
+            # else:
+            # nav.computePath(nav.world.getAgent().getLocation(), nav.getDestination())
+                # nav.world.getAgent().stopMoving()
+                # nav.setPath(None)
+    #     if target is None or minimumDistance(gate, target) <= nav.world.getAgent().getMaxRadius():
+    #         nav.world.getAgent().stopMoving()
+    #         nav.setPath(None)
+    # if nav.path is not None:
+        # nav.computePath(nav.world.getAgent().getLocation(), nav.getDestination())
 
     ### YOUR CODE GOES ABOVE HERE ###
     return None
@@ -210,11 +244,17 @@ def myCheckpoint(nav):
 ### agent: the Agent object
 def clearShot(p1, p2, worldLines, worldPoints, agent):
     ### YOUR CODE GOES BELOW HERE ###
-    if rayTraceWorldNoEndPoints(p1, p2, worldLines) == None:
+    if rayTraceWorldNoEndPoints(p1, p2, worldLines) is not None:
+        return False
+    else:
         for point in worldPoints:
-            if minimumDistance((p1, p2), point) < agent.getMaxRadius():
+            if minimumDistance((p1, p2), point) <= agent.getMaxRadius():
                 return False
         return True
+    # if rayTraceWorldNoEndPoints(p1, p2, worldLines) is None:
+    #     for point in worldPoints:
+    #         if minimumDistance((p1, p2), point) < agent.getMaxRadius():
+    #             return False
+    #     return True
     ### YOUR CODE GOES ABOVE HERE ###
     return False
-
