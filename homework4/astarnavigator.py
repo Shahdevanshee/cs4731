@@ -145,8 +145,6 @@ def astar(init, goal, network):
             path = [init] + path
             break
 
-
-
     ### YOUR CODE GOES ABOVE HERE ###
     return path, closed
 
@@ -175,64 +173,24 @@ def getNeighbors(point, network):
 
 def myUpdate(nav, delta):
     ### YOUR CODE GOES BELOW HERE ###
-    # print nav.world.getGates()
-    # gates = nav.world.getGates()
-    # print 'targets', nav.agent.targets
-    # for gate in gates:
-        # if minimumDistance(gate, nav.world.getAgent().getLocation()) > nav.world.getAgent().getMaxRadius():
-            # nav.world.getAgent().stopMoving()
-            # nav.setPath(None)
-    # if nav.path is not None:
-            # nav.computePath(nav.world.getAgent().getLocation(), nav.getDestination())
+    gates = nav.world.getGates()
+    for gate in gates:
+        if nav.getDestination() is None or rayTrace(nav.agent.getLocation(), nav.agent.moveTarget, gate) is not None or minimumDistance(gate, nav.agent.getLocation()) <= nav.agent.getMaxRadius():
+            break
+    nav.world.getAgent().stopMoving()
+    nav.setPath(None)
     ### YOUR CODE GOES ABOVE HERE ###
     return None
 
 
 def myCheckpoint(nav):
     ### YOUR CODE GOES BELOW HERE ###
-    print nav.path
-    # nav.computePath(nav.world.getAgent().getLocation(), nav.getDestination())
     gates = nav.world.getGates()
-    # target = nav.world.getAgent().getMoveTarget()
     for gate in gates:
-    #     print nav.world.getAgent().getLocation()
-    #     print nav.getDestination()
-    #     print gate
-    #     print nav.agent.targets
-        if len(nav.path) > 0 and rayTrace(nav.path[0], nav.getDestination(), gate) is not None:
-            # nav.computePath(nav.world.getAgent().getLocation(), nav.getDestination())
-        # else:
-            # nav.world.getAgent().stopMoving()
-            closest = findClosestUnobstructed(nav.path[0], nav.pathnodes, nav.world.getLinesWithoutBorders())
-            if closest is None:
-                # closest = close_list[len(close_list) - 1]
-                nav.world.getAgent().stopMoving()
-                # nav.world.getAgent().setPath(None)
-            # print '1', closest
-            # print '2', nav.world.getAgent().getLocation()
-            # print '3', close_list
-            else:
-                nav.computePath(nav.world.getAgent().getLocation(), closest)
-    #         dest = None
-    #         if len(nav.agent.targets) > 0:
-    #             for t in nav.agent.targets:
-    #                 if rayTrace(nav.world.getAgent().getLocation(), t, gate) is None:
-    #                     dest = t
-    #                     break
-            # if dest is not None:
-                # nav.world.getAgent().navigateTo(nav.agent.targets[0])
-                # nav.world.getAgent().navigateTo(dest)
-                # nav.computePath(nav.world.getAgent().getLocation(), dest)
-            # else:
-            # nav.computePath(nav.world.getAgent().getLocation(), nav.getDestination())
-                # nav.world.getAgent().stopMoving()
-                # nav.setPath(None)
-    #     if target is None or minimumDistance(gate, target) <= nav.world.getAgent().getMaxRadius():
-    #         nav.world.getAgent().stopMoving()
-    #         nav.setPath(None)
-    # if nav.path is not None:
-        # nav.computePath(nav.world.getAgent().getLocation(), nav.getDestination())
-
+        if nav.getDestination() is None or rayTrace(nav.agent.getLocation(), nav.agent.moveTarget, gate) is not None or minimumDistance(gate, nav.agent.getLocation()) <= nav.agent.getMaxRadius():
+            break
+    nav.world.getAgent().stopMoving()
+    nav.setPath(None)
     ### YOUR CODE GOES ABOVE HERE ###
     return None
 
@@ -251,10 +209,5 @@ def clearShot(p1, p2, worldLines, worldPoints, agent):
             if minimumDistance((p1, p2), point) <= agent.getMaxRadius():
                 return False
         return True
-    # if rayTraceWorldNoEndPoints(p1, p2, worldLines) is None:
-    #     for point in worldPoints:
-    #         if minimumDistance((p1, p2), point) < agent.getMaxRadius():
-    #             return False
-    #     return True
     ### YOUR CODE GOES ABOVE HERE ###
     return False
