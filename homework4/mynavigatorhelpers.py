@@ -29,7 +29,7 @@ from core import *
 ### path: the path previously computed by the Floyd-Warshall algorithm
 ### world: pointer to the world
 def shortcutPath(source, dest, path, world, agent):
-	### YOUR CODE GOES BELOW HERE ###
+    ### YOUR CODE GOES BELOW HERE ###
     for i in range(len(path)):
         if path[i] == dest:
             continue
@@ -39,8 +39,8 @@ def shortcutPath(source, dest, path, world, agent):
                 for j in range(i + 2):
                     ret_list.append(path[j])
                 return ret_list
-	### YOUR CODE GOES BELOW HERE ###
-	return path
+    ### YOUR CODE GOES BELOW HERE ###
+    return path
 
 
 ### This function changes the move target of the agent if there is an opportunity to walk a shorter path.
@@ -48,12 +48,12 @@ def shortcutPath(source, dest, path, world, agent):
 ### nav: the navigator object
 ### This function returns True if the moveTarget and/or path is modified and False otherwise
 def mySmooth(nav):
-	### YOUR CODE GOES BELOW HERE ###
+    ### YOUR CODE GOES BELOW HERE ###
     if clearShot(nav.agent.getLocation(), nav.getDestination(), nav.world.getLines(), nav.world.getPoints(), nav.agent):
         nav.agent.moveToTarget(nav.getDestination())
         return True
-	### YOUR CODE GOES ABOVE HERE ###
-	return False
+    ### YOUR CODE GOES ABOVE HERE ###
+    return False
 
 
 ### Returns true if the agent can get from p1 to p2 directly without running into an obstacle.
