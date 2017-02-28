@@ -63,12 +63,12 @@ obstacles = obstacles + [[(550, 570), (600, 550), (660, 570), (650, 630), (600, 
 ### Minion Subclasses
 
 class MyHumanMinion(class1):
-	
+
 	def __init__(self, position, orientation, world, image = NPC, speed = SPEED, viewangle = 360, hitpoints = HITPOINTS, firerate = FIRERATE, bulletclass = SmallBullet):
 		class1.__init__(self, position, orientation, world, image, speed, viewangle, hitpoints, firerate, bulletclass)
 
 class MyAlienMinion(class2):
-	
+
 	def __init__(self, position, orientation, world, image = JACKAL, speed = SPEED, viewangle = 360, hitpoints = HITPOINTS, firerate = FIRERATE, bulletclass = SmallBullet):
 		class2.__init__(self, position, orientation, world, image, speed, viewangle, hitpoints, firerate, bulletclass)
 
@@ -78,7 +78,7 @@ world = MOBAWorld(SEED, dims, dims, 2, 60)
 agent = Hero((SCREEN[0]/2, SCREEN[1]/2), 0, world)
 agent.team = 0
 world.setPlayerAgent(agent)
-world.initializeTerrain(obstacles, (0, 0, 0), 4)
+world.initializeTerrain(obstacles, (255, 0, 0), 4)
 agent.setNavigator(Navigator())
 world.debugging = True
 
