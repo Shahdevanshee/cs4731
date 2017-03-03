@@ -116,7 +116,6 @@ class Move(State):
         self.agent.navigateTo(self.target.getLocation())
 
     def execute(self, delta = 0):
-        # print 'getVisible()', self.agent.getVisible(), '\n'
         if self.agent.moveTarget is None and self.target is not None:
             self.agent.navigateTo(self.target.getLocation())
         for tower in self.enemy_towers:
@@ -125,11 +124,7 @@ class Move(State):
         for base in self.enemy_bases:
             if base in self.agent.getVisible() and distance(self.agent.getLocation(), base.getLocation()) <= BULLETRANGE:
                 self.agent.changeState(AttackBase, base)
-        # for enemy in self.agent.world.getEnemyNPCs(self.team):
-        #     print 'enemy info', enemy, enemy in self.agent.getVisible(), '\n'
-        #     if enemy in self.agent.getVisible(): #and distance(self.agent.getLocation(), base.getLocation()) <= BULLETRANGE:
-        #         print '-------------- entering attack enemy --------------'
-        #         self.agent.changeState(AttackEnemy, enemy, self.target, self.team, self.enemy_towers, self.enemy_bases)
+
 
 ############################
 ### AttackTower
@@ -142,10 +137,8 @@ class AttackTower(State):
         self.tower = args[0]
 
     def enter(self, oldstate):
-        # State.enter(self, oldstate)
-        # stop moving
-        self.agent.stopMoving()
-        # return None
+        self.agent.navigator.path = None
+        self.agent.navigator.destination = None
 
     def execute(self, delta = 0):
         ### YOUR CODE GOES BELOW HERE ###
@@ -155,7 +148,6 @@ class AttackTower(State):
             self.agent.turnToFace(self.tower.getLocation())
             self.agent.shoot()
         ### YOUR CODE GOES ABOVE HERE ###
-        # return None
 
 
 ############################
@@ -169,10 +161,8 @@ class AttackBase(State):
         self.base = args[0]
 
     def enter(self, oldstate):
-        # State.enter(self, oldstate)
-        # stop moving
-        self.agent.stopMoving()
-        # return None
+        self.agent.navigator.path = None
+        self.agent.navigator.destination = None
 
     def execute(self, delta = 0):
         ### YOUR CODE GOES BELOW HERE ###
@@ -181,45 +171,4 @@ class AttackBase(State):
         else:
             self.agent.turnToFace(self.base.getLocation())
             self.agent.shoot()
-        if not self.base.isAlive():
-            print '--------------- num spawned enemy base ----------------', self.base.numSpawned
-        if self.agent.world.getBaseForTeam(self.agent.getTeam()) is not None:
-            print '--------------- num spawned my base----------------', self.agent.world.getBaseForTeam(self.agent.getTeam()).numSpawned
         ### YOUR CODE GOES ABOVE HERE ###
-        # return None
-
-
-############################
-### AttackEnemy
-###
-###
-
-# class AttackEnemy(State):
-
-#     def parseArgs(self,args):
-#         self.enemy = args[0]
-#         self.target = args[1]
-#         self.team = args[2]
-#         self.enemy_towers = args[3]
-#         self.enemy_bases = args[4]
-
-#     def enter(self, oldstate):
-#         # State.enter(self, oldstate)
-#         # stop moving
-#         self.agent.stopMoving()
-#         self.oldstate = oldstate
-#         # return None
-
-#     def execute(self, delta = 0):
-#         ### YOUR CODE GOES BELOW HERE ###
-#         if not (self.enemy in self.agent.getVisible() and distance(self.agent.getLocation(), self.enemy.getLocation()) <= BULLETRANGE):
-#             # self.agent.changeState(Move, self.target, self.team, self.enemy_towers, self.enemy_bases)
-#             # print 'nope'
-#             State.enter(self, self.oldstate)
-#         else:
-#             self.agent.turnToFace(self.enemy.getLocation())
-#             self.agent.shoot()
-#         ### YOUR CODE GOES ABOVE HERE ###
-#         # return None
-
-
