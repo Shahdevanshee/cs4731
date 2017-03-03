@@ -30,13 +30,13 @@ from core import *
 ### agent: the Agent object
 def clearShot(p1, p2, worldLines, worldPoints, agent):
     ### YOUR CODE GOES BELOW HERE ###
-    if rayTraceWorldNoEndPoints(p1, p2, worldLines) is not None:
-        return False
-    else:
-        for point in worldPoints:
-            if minimumDistance((p1, p2), point) <= agent.getMaxRadius():
-                return False
-        return True
+    # if rayTraceWorldNoEndPoints(p1, p2, worldLines) is not None:
+    #     return False
+    # else:
+    #     for point in worldPoints:
+    #         if minimumDistance((p1, p2), point) <= agent.getMaxRadius():
+    #             return False
+    #     return True
     ### YOUR CODE GOES ABOVE HERE ###
     return False
 
@@ -47,15 +47,15 @@ def clearShot(p1, p2, worldLines, worldPoints, agent):
 ### world: pointer to the world
 def shortcutPath(source, dest, path, world, agent):
     ### YOUR CODE GOES BELOW HERE ###
-    for i in range(len(path)):
-        if path[i] == dest:
-            continue
-        else:
-            if clearShot(path[i], dest, world.getLines(), world.getPoints(), agent):
-                ret_list = []
-                for j in range(i + 2):
-                    ret_list.append(path[j])
-                return ret_list
+    # for i in range(len(path)):
+    #     if path[i] == dest:
+    #         continue
+    #     else:
+    #         if clearShot(path[i], dest, world.getLines(), world.getPoints(), agent):
+    #             ret_list = []
+    #             for j in range(i + 2):
+    #                 ret_list.append(path[j])
+    #             return ret_list
     ### YOUR CODE GOES BELOW HERE ###
     return path
 
@@ -66,8 +66,8 @@ def shortcutPath(source, dest, path, world, agent):
 ### This function returns True if the moveTarget and/or path is modified and False otherwise
 def mySmooth(nav):
     ### YOUR CODE GOES BELOW HERE ###
-    if clearShot(nav.agent.getLocation(), nav.getDestination(), nav.world.getLines(), nav.world.getPoints(), nav.agent):
-        nav.agent.moveToTarget(nav.getDestination())
-        return True
+    # if clearShot(nav.agent.getLocation(), nav.getDestination(), nav.world.getLines(), nav.world.getPoints(), nav.agent):
+    #     nav.agent.moveToTarget(nav.getDestination())
+    #     return True
     ### YOUR CODE GOES ABOVE HERE ###
     return False
