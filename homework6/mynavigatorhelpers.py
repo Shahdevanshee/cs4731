@@ -17,7 +17,7 @@
 '''
 
 import sys, pygame, math, numpy, random, time, copy
-from pygame.locals import * 
+from pygame.locals import *
 
 from constants import *
 from utils import *
@@ -29,10 +29,16 @@ from core import *
 ### worldLines: all the lines in the world
 ### agent: the Agent object
 def clearShot(p1, p2, worldLines, worldPoints, agent):
-	### YOUR CODE GOES BELOW HERE ###
-
-	### YOUR CODE GOES ABOVE HERE ###
-	return False
+    ### YOUR CODE GOES BELOW HERE ###
+    # if rayTraceWorldNoEndPoints(p1, p2, worldLines) is not None:
+    #     return False
+    # else:
+    #     for point in worldPoints:
+    #         if minimumDistance((p1, p2), point) <= agent.getMaxRadius():
+    #             return False
+    #     return True
+    ### YOUR CODE GOES ABOVE HERE ###
+    return False
 
 ### This function optimizes the given path and returns a new path
 ### source: the current position of the agent
@@ -40,10 +46,18 @@ def clearShot(p1, p2, worldLines, worldPoints, agent):
 ### path: the path previously computed by the Floyd-Warshall algorithm
 ### world: pointer to the world
 def shortcutPath(source, dest, path, world, agent):
-	### YOUR CODE GOES BELOW HERE ###
-
-	### YOUR CODE GOES BELOW HERE ###
-	return path
+    ### YOUR CODE GOES BELOW HERE ###
+    # for i in range(len(path)):
+    #     if path[i] == dest:
+    #         continue
+    #     else:
+    #         if clearShot(path[i], dest, world.getLines(), world.getPoints(), agent):
+    #             ret_list = []
+    #             for j in range(i + 2):
+    #                 ret_list.append(path[j])
+    #             return ret_list
+    ### YOUR CODE GOES BELOW HERE ###
+    return path
 
 
 ### This function changes the move target of the agent if there is an opportunity to walk a shorter path.
@@ -51,9 +65,9 @@ def shortcutPath(source, dest, path, world, agent):
 ### nav: the navigator object
 ### This function returns True if the moveTarget and/or path is modified and False otherwise
 def mySmooth(nav):
-	### YOUR CODE GOES BELOW HERE ###
-
-	### YOUR CODE GOES ABOVE HERE ###
-	return False
-
-
+    ### YOUR CODE GOES BELOW HERE ###
+    # if clearShot(nav.agent.getLocation(), nav.getDestination(), nav.world.getLines(), nav.world.getPoints(), nav.agent):
+    #     nav.agent.moveToTarget(nav.getDestination())
+    #     return True
+    ### YOUR CODE GOES ABOVE HERE ###
+    return False
