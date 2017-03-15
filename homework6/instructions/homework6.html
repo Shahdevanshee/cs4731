@@ -7,39 +7,39 @@
 
 <body>
 <h1>Homework 6: Hero Agents</h1>
-<p>A <a href="http://en.wikipedia.org/wiki/Multiplayer_online_battle_arena">Multiplayer Online Battle Arena (MOBA)</a> is a form of Real Time Strategy game in which the player controls a powerful agent called the &quot;Hero&quot; in a world populated with simple, weak, fully computer-controlled agents called &quot;Minions.&quot; In this assignment, we will implement the decision-making for Minion agents.</p>
-<p>A MOBA has two teams. Each team has a base, which is protected by a number of towers. The goal is to destroy the opponent's base. In MOBAs, bases periodically spawn Minion agents, who automatically attack the enemy towers and bases. Towers and bases can defend themselves; they target Minions before targeting Heros. Thus Minions provide cover for Heros, who are much more powerful. </p>
-<p>In this version of a MOBA, Heros have a number of special properties that make them more powerful than Minions:</p>
+<p>A <a href="http://en.wikipedia.org/wiki/Multiplayer_online_battle_arena">Multiplayer Online Battle Arena (MOBA)</a> is a form of Real-Time Strategy game in which the player controls a powerful agent called the &quot;Hero&quot; in a world populated with simple, weak, fully computer-controlled agents called &quot;Minions.&quot; In this assignment, we will implement the decision-making for Hero agents.</p>
+<p>A MOBA has two teams. Each team has a base, which is protected by a number of towers. The goal is to destroy the opponent's base. In MOBAs, bases periodically spawn Minion agents, who automatically attack the enemy towers and bases. Towers and bases can defend themselves; they target Minions before targeting Heroes. Thus Minions provide cover for Heroes, who are much more powerful. </p>
+<p>In this version of a MOBA, Heroes have a number of special properties that make them more powerful than Minions:</p>
 <ul>
-  <li>Heros have twice as many hitpoints as Minions.</li>
-  <li>Heros have a more powerful gun.</li>
-  <li>Heros have a secondary attack that does damage to all enemies within a certain radius.</li>
-  <li>Heros can be healed if they return to the base.</li>
-  <li>Heros can dodge bullets by &quot;jumping&quot; a short distance in a given direction (or a random direction).</li>
-  <li>Heros can gain level-ups by killing enemy agents. A level is gained for each kill the Hero makes (the last agent to damage an opponent before it dies). The Hero gains one extra point of damage per level and maximum hitpoints incresases by one for each level earned.</li>
+  <li>Heroes have twice as many hitpoints as Minions.</li>
+  <li>Heroes have a more powerful gun.</li>
+  <li>Heroes have a secondary attack that does damage to all enemies within a certain radius.</li>
+  <li>Heroes can be healed if they return to the base.</li>
+  <li>Heroes can dodge bullets by &quot;jumping&quot; a short distance in a given direction (or a random direction).</li>
+  <li>Heroes can gain level-ups by killing enemy agents. A level is gained for each kill the Hero makes (the last agent to damage an opponent before it dies). The Hero gains one extra point of damage per level and maximum hitpoints increases by one for each level earned.</li>
 </ul>
-<p>In this assignment, you will implement the AI for a Hero agent in a world similar to a MOBA. However, we will substantially change the rules so we can focus on Hero AI without all the complications of a MOBA. In this game, there are no towers and each team has a maximum of three minions at any given time. The minions wander aimlessly, but shoot at Heroes if they ever get too close. Heros must hunt each other, and the game is scored by how much damage one Hero does to another Hero.</p>
+<p>In this assignment, you will implement the AI for a Hero agent in a world similar to a MOBA. However, we will substantially change the rules so we can focus on Hero AI without all the complications of a MOBA. In this game, there are no towers and each team has a maximum of three minions at any given time. The minions wander aimlessly, but shoot at Heroes if they ever get too close. Heroes must hunt each other, and the game is scored by how much damage one Hero does to another Hero.</p>
 <a href="heroes1.png"><img src="heroes1.png" width="480" border="1" /></a>
-<p>We will build off your previous navigation mesh and path network generation solution from <a href="homework2.html">homework 2</a> and your previous A* implementation from <a href="homework4.html">homework 4</a>.</p>
-<p>Hero decision-making can be anything, but in a MOBA, typically the Hero focuses on gaining extra powers so it can take out enemy Minions at a faster rate. Eventually, a Hero will be powerful enough to quickly take down towers and bases. Since towers and bases target Minions before targeting Heros, it is beneficial for Heros to protect friendly Minions and use them for cover. By targeting enemy Minions, a Hero can make it harder for the enemy Hero to take cover. Heros may engage each other from time to time to disrupt opponent advantage.</p>
+<p>We will build off your previous navigation mesh and path network generation solution from <b>homework 3</b> and your previous A* implementation from <b>homework 4</b>.</p>
+<p>Hero decision-making can be anything, but in a MOBA, typically the Hero focuses on gaining extra powers so it can take out enemy Minions at a faster rate. Eventually, a Hero will be powerful enough to quickly take down towers and bases. Since towers and bases target Minions before targeting Heroes, it is beneficial for Heroes to protect friendly Minions and use them for cover. By targeting enemy Minions, a Hero can make it harder for the enemy Hero to take cover. Heroes may engage each other from time to time to disrupt opponent advantage.</p>
 <p>However, in this assignment, we will only focus on the Hero vs. Hero aspects of a MOBA. You will implement a Behavior Tree  for Hero agents. You will be provided with a special class for Heroes that knows how to execute a behavior tree. In this assignment, you will write the control logic for behavior trees and complete the code for a number of Hero behaviors.</p>
-<p>In Hero vs. Hero combat the best solution is to focus on strategy. Heros have many properties (listed above) that make for interesting trade-offs when deciding what behavior to execute. Examples of strategic decisions include: hunting the enemy Hero, hunting Minions to increase level, using a longer-ranged shooting attack versus a limited-range area effect attack, retreating to the base to heal, hiding from the enemy Hero, hiding from Minions, etc.</p>
+<p>In Hero vs. Hero combat the best solution is to focus on strategy. Heroes have many properties (listed above) that make for interesting trade-offs when deciding what behavior to execute. Examples of strategic decisions include: hunting the enemy Hero, hunting Minions to increase level, using a longer-ranged shooting attack versus a limited-range area effect attack, retreating to the base to heal, hiding from the enemy Hero, hiding from Minions, etc.</p>
 <p>The bases will automatically spawn Minion agents, up to a maximum of three. If a Hero dies, it will immediately respawn at the base, but the level will be reset.</p>
-<p>Both teams will use the same Minion agent AI, which wanders the map to random places. Minions will shoot at Heros if they are within firing range.</p>
-<p>The game score is computed as the cummulative amount of damage one Hero has done to the other Hero. You must implement Hero AI that can result in a higher score than the opponent. </p>
+<p>Both teams will use the same Minion agent AI, which wanders the map to random places. Minions will shoot at Heroes if they are within firing range.</p>
+<p>The game score is computed as the cumulative amount of damage one Hero has done to the other Hero. You must implement Hero AI that can result in a higher score than the opponent. </p>
 <hr />
 <h2>Behavior Trees in a nutshell</h2>
 <p>A behavior tree is a hierarchically-arranged description of all possible plans of action that an agent can consider, and the conditions under which those plans can be selected or rejected. Behavior trees represent a middle ground between finite state machines, in which all behavior is specified by a designer, and formal planning, in which all decisions are autonomously made. A behavior tree allows designers to specify which plans can be generated and allow the agent to make the final decision on which plan to execute. Since enumerating all possible plans an agent can take may be intractable, behavior trees allow plans to be broken up into sub-plans that are reused in a hierarchical fashion. </p>
-<p>Behavior trees are made up of different types of nodes. Internal nodes represent behavior flow control, specifying how to combine sub-trees into plans. Leaf nodes are tasks, specifying behaviors an agent should execute in the world. Tasks also specify the conditions under which tasks can and cannot be performed. The behavior tree acts as a pesudo-mathematical definition of the agent's brain, with tasks performing call-backs to the agent body to act in the world and affect the world state.</p>
+<p>Behavior trees are made up of different types of nodes. Internal nodes represent behavior flow control, specifying how to combine sub-trees into plans. Leaf nodes are tasks, specifying behaviors an agent should execute in the world. Tasks also specify the conditions under which tasks can and cannot be performed. The behavior tree acts as a pseudo-mathematical definition of the agent's brain, with tasks performing call-backs to the agent body to act in the world and affect the world state.</p>
 <p>Consider the behavior tree below:</p>
 <p><a href="behavior-tree.png"><img src="behavior-tree.png" border="0" /></a></p>
 <p>At every tick, the agent calls the execute() function on the root of the tree. Each type of node has a different logic for execution. The nodes labeled with question marks are Selector nodes. A Selector node tries to execute each child until one indicates that it can be executed. Thus the behavior tree above first tries to retreat. If it is not appropriate to retreat, it tries something else. The nodes labeled with arrows are Sequence nodes. A Sequence node tries to execute each child in turn until all children have reported that they have executed successfully. </p>
-<p>Thus, the logic represented by the above behavior tree is as follows. The agent tries to retreat, returning to the base for healing. If it is not appropriate for the agent to retreat--it has not lost enough health--it then tries to chase the hero and then kill the hero. If that sequence fails for any reason, the agent tries to chase a minion and then kill the minion.</p>
-<p>The circles in the diagram are a special type of node called a Daemon. A Daemon checks a condition in the world and decides whether to execute its child or return instant failure. For example, the top most Daemon might check whether the health of the agent is greater than 50%. Thus, the agent can only chase heroes and minions if it has enough health. The lower Daemon might check whether the agent is more powerful than the enemy Hero. Thus, the agent can only execute the sequence of chasing and killing the enemy Hero if it is strong enough to do so. Daemons short-circut the tree, allowing a decision to recurse to be made quickly. They also allow the tree to quickly stop executing on a sub-tree if certain conditions become false.</p>
+<p>Thus, the logic represented by the above behavior tree is as follows. The agent tries to retreat, returning to the base for healing. If it is not appropriate for the agent to retreat&mdash;it has not lost enough health&mdash;it then tries to chase the hero and then kill the hero. If that sequence fails for any reason, the agent tries to chase a minion and then kill the minion.</p>
+<p>The circles in the diagram are a special type of node called a Daemon. A Daemon checks a condition in the world and decides whether to execute its child or return instant failure. For example, the top-most Daemon might check whether the health of the agent is greater than 50%. Thus, the agent can only chase heroes and minions if it has enough health. The lower Daemon might check whether the agent is more powerful than the enemy Hero. Thus, the agent can only execute the sequence of chasing and killing the enemy Hero if it is strong enough to do so. Daemons short-circuit the tree, allowing a decision to recurse to be made quickly. They also allow the tree to quickly stop executing on a sub-tree if certain conditions become false.</p>
 <p>An agent that implements a behavior tree calls the execute() function of the root node every tick. The purpose of internal nodes (Selectors, Sequences, and Daemons) is to figure out which leaf node (task) should have its execute() function called that tick. Thus think of a behavior tree as a cascade in which control flows from the root to exactly one leaf node. The execute() function of the leaf node is called and any appropriate action taken.</p>
 <p>Nodes can return one of three values: <strong>success</strong> (True), <strong>failure</strong> (False), or <strong>running</strong> (None). Success means that the behavior has run to completion and has achieved what it is supposed to achieve. For example, a successful retreat means having the agent's health restored to 100%. Failure means that either the behavior is not applicable in the current world state or that it is no longer able to achieve the success conditions and should terminate. In a non-turn-based game world, some behaviors require many ticks to complete successfully (or to fail). For example, retreating requires navigating back to the home base, which may take many ticks. The running (None) return value means that the node requires more time to determine whether it has succeeded or failed.</p>
 <p><strong>Logic for a Selector node:</strong></p>
-<p>The execute() function of a Selector node must decide which child should execute. It tries to execute each child in order until one<strong> does not </strong>return failure. However, only one child can have its execute() function called. Therefore a Selector remembers which child should be tried on the current tick.</p>
+<p>The execute() function of a Selector node must decide which child should execute. It tries to execute each child in order until one<strong> does not </strong>return failure. However, only one child can have its execute() function called. Therefore, a Selector remembers which child should be tried on the current tick.</p>
 <ol>
   <li>If all children have been tried and none have succeeded, then the Selector itself fails and returns False.</li>
   <li>Otherwise:
@@ -51,19 +51,19 @@
   </li>
 </ol>
 <p><strong>Logic for a Sequence node:</strong></p>
-<p>The execute() function of a Sequence node must decide which child should execute. It tries to execute each child in order until one returns a failure. However, only one child can have its execute() function called. Therefore a Sequence remembers which child should be tried on the current tick.</p>
+<p>The execute() function of a Sequence node must decide which child should execute. It tries to execute each child in order until one returns a failure. However, only one child can have its execute() function called. Therefore, a Sequence remembers which child should be tried on the current tick.</p>
 <ol>
   <li>If all children have been tried and all have succeeded, then the Sequence itself succeeds and returns True.</li>
   <li>Otherwise:
     <ol>
-      <li>If the current child's execute() returns True, then update the current child and return None (indicating that this nodes whould be tried again next tick).</li>
+      <li>If the current child's execute() returns True, then update the current child and return None (indicating that this nodes would be tried again next tick).</li>
       <li>If the current child's execute() returns False, then the Sequence itself fails and returns False.</li>
       <li>If the current child's execute() returns None, then return None.</li>
     </ol>
   </li>
 </ol>
 <p><strong>Leaf nodes:</strong></p>
-<p>The execute() functions of a leaf node must do three things. First, it must check applicability conditions and return failure immediately if the behavior is not applicable to run at this time. Second, it must call back to the agent to perform any appropriate actions. Whatever the leaf node does, it shoud not require a lot of computation because execute() is called every tick. Third, it must determine whether the behavior has succeeded. If the behavior is applicable but has not succeeded, it should indicate that it is still running by returning None.</p>
+<p>The execute() functions of a leaf node must do three things. First, it must check applicability conditions and return failure immediately if the behavior is not applicable to run at this time. Second, it must call back to the agent to perform any appropriate actions. Whatever the leaf node does, it should not require a lot of computation because execute() is called every tick. Third, it must determine whether the behavior has succeeded. If the behavior is applicable but has not succeeded, it should indicate that it is still running by returning None.</p>
 <p>The first time a leaf node executes, an additional enter() function will be called to do any one-time set up for execution. Enter() will only be called once per leaf node. However, if the tree is ever reset, then each leaf node will have its enter() function called again the next time the node is visited. </p>
 <p><strong>Daemon nodes:</strong></p>
 <p>The execute() function of a Daemon node checks the applicability of an entire sub-tree (as opposed to a single behavior). The execute() function checks the applicability conditions and returns False if the conditions are not met. If the conditions are met, the execute() function of its single child is called and the Daemon returns the child's return value as if it were its own. Daemons assume a single child.</p>
@@ -83,7 +83,7 @@
 <ul>
   <li>getHitpoints(): returns the number of hitpoints.</li>
   <li>getTeam(): returns the symbol of the team the agent is on.</li>
-  <li>turnToFace(pos): turn the agent to face a particular point (x, y)</li>
+  <li>turnToFace(pos): turn the agent to face a particular point (x, y).</li>
   <li>shoot(): fire the agent's gun in the direction the agent is facing. The agent can only fire after a certain number of ticks have elapsed.</li>
 </ul>
 <p>Note: To effectively shoot at something, first turn the agent to face the target (or to the point the agent wishes to fire at) with turnToFace() and then call shoot().</p>
@@ -114,7 +114,7 @@
 <p>For example: [(Sequence, 1), [(Sequence, 2), (BTNode, 3), (BTNode, 4)], [(Selector, 5), [(Sequence, 6), (BTNode, 7), (BTNode, 8)], (BTNode, 9), (BTNode, 10), BTNode]] creates the following behavior tree. In this example, we are assuming that the second element in a Tuple is an identification parameter for the node. Note that one node does not have any parameters.</p>
 <img src="behavior-tree-spec.png" />
 <h3>BTNode</h3>
-<p>BTNode is defined in behaviortree.py. a BTNode is a parent class for nodes in a behavior tree. BTNode assumes that a node has children, but leaf nodes do not use the children. The primary functionality of a BTNode is it's execute() function, which will be called in the course of a tick. The first time a BTNode is visited in the coruse of exection, the enter() function is also called. BTNode assumes a node has children, but that is not necessarily the case for  behavior types, which will always be leaf nodes. If a BTNode is an internal node, it keeps track of its current child with an index number.</p>
+<p>BTNode is defined in behaviortree.py. a BTNode is a parent class for nodes in a behavior tree. BTNode assumes that a node has children, but leaf nodes do not use the children. The primary functionality of a BTNode is it's execute() function, which will be called in the course of a tick. The first time a BTNode is visited in the course of execution, the enter() function is also called. BTNode assumes a node has children, but that is not necessarily the case for  behavior types, which will always be leaf nodes. If a BTNode is an internal node, it keeps track of its current child with an index number.</p>
 <p>Member variables:</p>
 <ul>
   <li>id: An identifier for the node. Useful for printing out the tree and debugging.</li>
@@ -140,7 +140,7 @@
   <li>getCurrentIndex(): returns the current index value.</li>
   <li>setCurrentIndex(index): sets the index value for the node.</li>
 </ul>
-<p>For exectute() to control the agent, it must make call-backs via the agent member variables. This is node in leaf nodes. For example, if the behavior of a state is to make the agent shoot, the execute() function can call self.agent.shoot().</p>
+<p>For execute() to control the agent, it must make call-backs via the agent member variables. This is node in leaf nodes. For example, if the behavior of a state is to make the agent shoot, the execute() function can call self.agent.shoot().</p>
 <p>The execute() function for internal nodes should determine which single child should have its execute() function called. The execute() function for leaf nodes should implement the intended behavior, making call-backs to the agent.</p>
 <p>The constructor for the base BTNode class takes a number of arguments, as a list. But it doesn't know what they are meant to be. Constructors for sub-classes can look at the arguments passed in through args and pick out the relevant information and store it or compute with it. For example, TestNode takes the first element in the list and sets the ID.</p>
 <p>For example, one might want a <strong>Taunt </strong>behavior, and the tree will be built to always taunt a particular enemy agent. The tree build specification could be [Sequence, (Taunt, enemyhero), [Selector, Retreat, [Sequence, ChaseHero, KillHero]]] where enemyagent is a pre-computed reference to the enemy hero. Even though the Taunt sub-class is expecting an argument, it will just be passed in to the constructor as args[0]. Use parseArgs(args) to capture the parameter and use it. For example:</p>
@@ -160,9 +160,10 @@
       ret = BTNode.execute(self, delta)<br />
       if self.target is not None:
       <ul>
-      print Hey&quot;, self.target, &quot;I don't like you!&quot;</ul>
+      print &quot;Hey&quot;, self.target, &quot;I don't like you!&quot;</ul>
       return ret<br />
     </ul>
+</ul>
 </ul>
 <P>In the sample above, when the behavior tree is built from the given specification, the Taunt object will be created and the reference to enemyhero will be passed in as args[0] and self.target will be set to enemyhero.</P>
 <h3>VisionAgent</h3>
@@ -215,9 +216,9 @@
 <p>When the agent is created (at the beginning of the game, or after it dies and respawns), it builds a behavior tree. The function treeSpec(), is a custom function that provides the specification for the behavior tree.</p>
 <h3>MOBABullet</h3>
 <p>A special Bullet class for the MOBA. MOBABullets differ from regular bullets in that they are range-limited. </p>
-<p>There are four sub-classes of MOBABullet: SmallBullet, BigBullet, BaseBullet, and TowerBullet. These bullets are specific to Minions, Heros, Bases, and Towers, respectively and do different amounts of damage.</p>
+<p>There are four sub-classes of MOBABullet: SmallBullet, BigBullet, BaseBullet, and TowerBullet. These bullets are specific to Minions, Heroes, Bases, and Towers, respectively and do different amounts of damage.</p>
 <h3>Base</h3>
-<p>Each team in a MOBA has a Base. Bases spawn minions at regular intervals as long as the maximum number of minions allowed at any given time has not been reached. Bases cannot be damaged as long as there are towers present on the same team. Bases can heal Heros---if a Hero touches a base, it's hitpoints are restored to maximum value.</p>
+<p>Each team in a MOBA has a Base. Bases spawn minions at regular intervals as long as the maximum number of minions allowed at any given time has not been reached. Bases cannot be damaged as long as there are towers present on the same team. Bases can heal Heroes&mdash;if a Hero touches a base, its hitpoints are restored to maximum value.</p>
 <p>Member variables:</p>
 <ul>
   <li>team: the symbol of the team that the base is on.</li>
@@ -268,9 +269,9 @@
 <hr />
 <h2>Instructions</h2>
 <p>To complete this assignment, you must implement the logic for Selector and Sequence node types. You must additionally complete the execution logic for a number of behavior tree node types specific to hero vs. hero combat.</p>
-<p>Use your solution to <a href="homework2.html">homework 2</a> to generate a navigation mesh and a corresponding path network. The instructor can provide you with a default solution if necessary. You may also wish to use any path smoothing operations from <a href="homework3.html">homework 3</a> or <a href="homework4.html">homework 4</a>. Use your A* implementation from <a href="homework4.html">homework 4</a>. The instructor can provide you with a default solution in necessary.</p>
+<p>Use your solution to <b>homework 3</b> to generate a navigation mesh and a corresponding path network. The instructor can provide you with a default solution if necessary. You may also wish to use any path smoothing operations from <b>homework 4</b>. Use your A* implementation from <b>homework 4</b>. The instructor can provide you with a default solution in necessary.</p>
 <p>The following steps are required to complete the assignment.</p>
-<p><strong>Step 1: </strong>Copy your myCreatePathNetwork function from homework 2. Copy your astarnavigator.py from homework 4. Copy mynavigatorhelpers.py functions from homework 3 or homework 4.</p>
+<p><strong>Step 1: </strong>Copy your myCreatePathNetwork function from homework 3. Copy your astarnavigator.py from homework 4. Copy mynavigatorhelpers.py functions from homework 4.</p>
 <p><strong>Step 2: </strong>Implement the execution logic for Sequence and Selector node types. Modify Sequence.execute() and Selector.execute() in btnode.py. See the explanation of Sequence and Selector nodes above for success conditions and failure conditions.</p>
 <p>Test your implementations using test.py:</p>
 <ul>
@@ -369,7 +370,7 @@
 <hr />
 <h2>Hints</h2>
 <p>To test your Sequence and Selector implementations, change the ID numbers of TestNodes in runtest.py to different even and odd numbers. You may also want to change TestNodes to DelayTestNodes.</p>
-<p>The player-controlled character is a GhostAgent, which can move through walls without being obstruted. Baseline Heros and Minions will not target GhostAgents. If you change the player-controlled character to a Hero in runhero.py or runherocompetition.py, then you will be able to dodge by pressing 'j' (for jump), and use the area effect attack by pressing 'a'.</p>
+<p>The player-controlled character is a GhostAgent, which can move through walls without being obstructed. Baseline Heroes and Minions will not target GhostAgents. If you change the player-controlled character to a Hero in runhero.py or runherocompetition.py, then you will be able to dodge by pressing 'j' (for jump), and use the area effect attack by pressing 'a'.</p>
 <p>Implement custom behaviors to perform more sophisticated tactics. If you do so, you may want to consider the following tips:</p>
 <ul>
   <li>Use agent.getVisible() and agent.getVisibleType() to figure out what the agent can shoot at.</li>
@@ -377,11 +378,11 @@
   <li>Implement a smart dodging algorithm that figures out which direction to dodge to avoid an incoming bullet (use getVisibleType(Bullet) to see bullets) and not jump into obstacles.</li>
   <li>Implement leading shots so you can shoot ahead to where an enemy will be instead of where they are at the time the bullet is released.</li>
   <li>If the Hero is hunting an opponent Minion or Hero, consider having the Hero go to where the enemy is also going.</li>
-  <li>Do not kill the enemy base--there is no strategic advantage in doing so. If you kill the base, the enemy Hero will not respawn and you will not be able to get more points.</li>
+  <li>Do not kill the enemy base&mdash;there is no strategic advantage in doing so. If you kill the base, the enemy Hero will not respawn and you will not be able to get more points.</li>
 </ul>
 <hr />
 <h2>Submission</h2>
-<p>To submit your solution, upload your modified btnode.py, mybehaviors.py,  mycreatepathnetwork.py, mynavigationhelpers.py, and astarnavigator.py.</p>
+<p>To submit your solution, upload your modified btnode.py, mybehaviors.py, mycreatepathnetwork.py, mynavigatorhelpers.py, and astarnavigator.py.</p>
 <p>You should not modify any other files in the game engine.</p>
 <p>DO NOT upload the entire game engine.</p>
 </body>
