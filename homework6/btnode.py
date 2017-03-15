@@ -134,10 +134,10 @@ class Sequence(BTNode):
         if child is True:
             self.setCurrentIndex(self.getCurrentIndex() + 1)
             return None
-        elif child is None:
-            return None
-        else:
+        elif child is False:
             return False
+        else:
+            return None
         ### YOUR CODE GOES ABOVE HERE ###
         return True
 
@@ -158,16 +158,15 @@ class Selector(BTNode):
         ### YOUR CODE GOES BELOW HERE ###
         if self.getNumChildren() == 0:
             return False
-        elif self.getCurrentIndex() >= self.getNumChildren():
+        if self.getCurrentIndex() >= self.getNumChildren():
             return False
+        child = self.getChild(self.getCurrentIndex()).execute(delta)
+        if child is False:
+            self.setCurrentIndex(self.getCurrentIndex() + 1)
+            return None
+        elif child is True:
+            return True
         else:
-            child = self.getChild(self.getCurrentIndex()).execute(delta)
-            if child is True:
-                return True
-            elif child is False:
-                self.setCurrentIndex(self.getCurrentIndex() + 1)
-                return None
-            else:
-                return None
+            return None
         ### YOUR CODE GOES ABOVE HERE ###
         return False
