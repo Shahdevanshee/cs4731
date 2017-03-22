@@ -1,0 +1,21 @@
+StartTime = -17
+LittleState: StTime = -17 EdTime = 97
+Totaltime = 114
+Die:  Gap 
+NEWLEVELSTART
+StartTime = -17
+LittleState: StTime = -17 EdTime = 44
+Totaltime = 61
+Die:  Gap 
+NEWLEVELSTART
+StartTime = -17
+LittleState: StTime = -17 EdTime = 27
+Totaltime = 44
+Die:  Gap 
+NEWLEVELSTART
+StartTime = -17
+RightMove: StTime = 0 EdTime = 89
+LeftMove: StTime = 90 EdTime = 16
+Totaltime = 215
+RightMove: StTime = 107 EdTime = 180
+LittleState: StTime = -17 EdTime = 198
