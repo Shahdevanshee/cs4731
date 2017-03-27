@@ -33,27 +33,7 @@ def treeSpec(agent):
     myid = str(agent.getTeam())
     spec = None
     ### YOUR CODE GOES BELOW HERE ###
-    tree = \
-        [(SuperRoot, "root"),
-            [(Selector, "sel_1"),
-                (Retreat, 0.5, "retreat"),
-                [(HitpointDaemon, 0.5, "hp_daemon"),
-                    [(Selector, "hero_minion_sel"),
-                        [(BuffDaemon, 1, "bf_daemon"),
-                            [(Sequence, "hero_seq"),
-                                (ChaseHero, "chase_hero"),
-                                (KillHero, "kill_hero"),
-                            ],
-                        ],
-                        [(Sequence, "minion_seq"),
-                            (ChaseMinion, "chase_minion"),
-                            (KillMinion, "kill_minion"),
-                        ],
-                    ]
-                ]
-            ]
-        ]
-    spec = tree
+
     ### YOUR CODE GOES ABOVE HERE ###
     return spec
 
@@ -61,29 +41,29 @@ def myBuildTree(agent):
     myid = str(agent.getTeam())
     root = None
     ### YOUR CODE GOES BELOW HERE ###
-    # root = makeNode(SuperRoot, agent, "root")
-    # sel_1 = makeNode(Selector, agent, "sel_1")
-    # retreat = makeNode(Retreat, agent, 0.5, "retreat")
-    # hp_daemon = makeNode(HitpointDaemon, agent, 0.5, "hp_daemon")
-    # sel_2 = makeNode(Selector, agent, "hero_minion_sel")
-    # bf_daemon = makeNode(BuffDaemon, agent, 1, "bf_daemon")
-    # seq_hero = makeNode(Sequence, agent, "hero_seq")
-    # chase_hero = makeNode(ChaseHero, agent, "chase_hero")
-    # kill_hero = makeNode(KillHero, agent, "kill_hero")
-    # seq_minion = makeNode(Sequence, agent, "minion_seq")
-    # chase_minion = makeNode(ChaseMinion, agent, "chase_minion")
-    # kill_minion = makeNode(KillMinion, agent, "kill_minion")
-    # root.addChild(sel_1)
-    # sel_1.addChild(retreat)
-    # sel_1.addChild(hp_daemon)
-    # hp_daemon.addChild(sel_2)
-    # sel_2.addChild(bf_daemon)
-    # sel_2.addChild(seq_minion)
-    # bf_daemon.addChild(seq_hero)
-    # seq_hero.addChild(chase_hero)
-    # seq_hero.addChild(kill_hero)
-    # seq_minion.addChild(chase_minion)
-    # seq_minion.addChild(kill_minion)
+    root = makeNode(SuperRoot, agent, "root")
+    sel_1 = makeNode(Selector, agent, "sel_1")
+    retreat = makeNode(Retreat, agent, 0.5, "retreat")
+    hp_daemon = makeNode(HitpointDaemon, agent, 0.5, "hp_daemon")
+    sel_2 = makeNode(Selector, agent, "hero_minion_sel")
+    bf_daemon = makeNode(BuffDaemon, agent, 1, "bf_daemon")
+    seq_hero = makeNode(Sequence, agent, "hero_seq")
+    chase_hero = makeNode(ChaseHero, agent, "chase_hero")
+    kill_hero = makeNode(KillHero, agent, "kill_hero")
+    seq_minion = makeNode(Sequence, agent, "minion_seq")
+    chase_minion = makeNode(ChaseMinion, agent, "chase_minion")
+    kill_minion = makeNode(KillMinion, agent, "kill_minion")
+    root.addChild(sel_1)
+    sel_1.addChild(retreat)
+    sel_1.addChild(hp_daemon)
+    hp_daemon.addChild(sel_2)
+    sel_2.addChild(bf_daemon)
+    sel_2.addChild(seq_minion)
+    bf_daemon.addChild(seq_hero)
+    seq_hero.addChild(chase_hero)
+    seq_hero.addChild(kill_hero)
+    seq_minion.addChild(chase_minion)
+    seq_minion.addChild(kill_minion)
     ### YOUR CODE GOES ABOVE HERE ###
     return root
 
@@ -253,12 +233,6 @@ class ChaseMinion(BTNode):
 
     def execute(self, delta = 0):
         ret = BTNode.execute(self, delta)
-        # TODO
-        # enemies = self.agent.world.getEnemyNPCs(self.agent.getTeam())
-        # if len(enemies) > 0:
-        #     for e in enemies:
-        #         if isinstance(e, Hero) and e in self.agent.getVisible():
-        #             self.reset()
         if self.target == None or self.target.isAlive() == False:
             # failed execution conditions
             print "exec", self.id, "false"
@@ -549,7 +523,7 @@ class SuperRoot(BTNode):
 
         attack_closest(self.agent)
         area_effect(self.agent)
-        # dodgeIfNeeded(self.agent)
+        dodge_bullet(self.agent)
 
         return ret
 
@@ -565,7 +539,8 @@ def attack_closest(agent):
 
     sorted_enemies = sort_enemies(agent, enemies)
     closest = sorted_enemies[0]
-    if distance(agent.getLocation(), closest.getLocation()) < BULLETRANGE:
+
+    if distance(agent.getLocation(), closest.getLocation()) <= BIGBULLETRANGE:
         agent.turnToFace(closest.getLocation())
         agent.shoot()
         return True
@@ -588,10 +563,37 @@ def area_effect(agent):
     return False
 
 
+def dodge_bullet(agent):
+    # if not agent.candodge:
+    #     return False
+
+    all_bullets = (agent.getVisibleType(Bullet))
+    enemy_bullets = []
+    sorted_enemy_bullets = []
+
+    for b in all_bullets:
+        if b.getOwner().getTeam() != agent.getTeam():
+            enemy_bullets.append(b)
+
+    sorted_enemy_bullets = sort_enemies(agent, enemy_bullets)
+
+    for b in sorted_enemy_bullets:
+        angle = math.radians(b.orientation)
+        add_to_loc = (1000 * math.cos(angle), -1000 * math.sin(angle))
+        trajectory_end = (b.getLocation()[0] + add_to_loc[0], b.getLocation()[1] + add_to_loc[1])
+        if minimumDistance([b.getLocation(), trajectory_end], agent.getLocation()) < agent.getMaxRadius():
+            return agent.dodge((angle + math.pi / 2))
+        else:
+            continue
+
+    return False
+
+
 def sort_enemies(agent, enemies):
     dist_dict = {}
     ret_list = []
     dist_list = []
+
     for e in enemies:
         dist = distance(agent.getLocation(), e.getLocation())
         dist_dict[e] = dist
@@ -599,10 +601,5 @@ def sort_enemies(agent, enemies):
     for k, v in sorted(dist_dict.iteritems(), key=lambda (k, v): (v, k)):
         ret_list.append(k)
         dist_list.append(v)
-    print ('-------')
-    print (ret_list)
-    print (dist_list)
-    print ('visible', agent.getVisible())
-    print ('-------')
-    return ret_list
 
+    return ret_list
