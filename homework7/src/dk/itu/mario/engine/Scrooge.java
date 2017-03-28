@@ -10,7 +10,6 @@ public class Scrooge extends PlayerProfile{
 	//returns a number bounded from 0 to 1
 	public double evaluateLevel(Level level)
 	{
-
 		int numCoins = 0;
 
 		int prevYMin = 12;
@@ -37,7 +36,7 @@ public class Scrooge extends PlayerProfile{
 		if (score>1.0){
 			score = 1.0;
 		}
-
+		
 		return score;
 	}
 }

@@ -18,32 +18,26 @@ public class MyLevel extends Level{
  
 	private Random random;
 	
-	private static final int STARTOFFSET = 5; // space reserved at the front of the level for Mario to start in.
-	private static final int EXITOFFSET = 5; // space reserved at the end of the level for the exit.
-	private static final int EXITPOSITION = 3; // number of blocks from the end to place the exit
-	private static final int DEFAULTHEIGHT = 15; // the default height of the level (0 is at the top).
+	private static final int STARTOFFSET = 5;
+	private static final int EXITOFFSET = 5;
+	private static final int EXITPOSITION = 3; // number of blocks from the end
+	private static final int DEFAULTHEIGHT = 15;
 	
-	// Default constructor
 	public MyLevel(int width, int height)
     {
 		super(width, height);
     }
-	
-	// Construct a level from DNA
+
 	public MyLevel(MyDNA dna, int type)
 	{
-		// The default length of a Mario level is 205 blocks.
+		// Add 10 units for the beginning platform and exit platform
 		this(205, 15);
-		
-		// Create the level from DNA specifications
 		create(dna, type);
 	}
 	
-	// This function translates the information in MyDNA into a grid of blocks.
-	// The grid is initially empty. Use setBlock() to add surfaces.
 	public void create(MyDNA dna, int type)
 	{
-		//Initial starting platform
+		//Initial starting platform is 3 blocks wide and flat ground.
 		for (int x = 0; x < STARTOFFSET; x++)
 		{
 			this.setBlock(x, DEFAULTHEIGHT-2, HILL_TOP);
@@ -52,22 +46,24 @@ public class MyLevel extends Level{
 
 		// Start your level at block index STARTOFFSET.
 		//// YOUR CODE GOES BELOW HERE ////
-
+		
+		
 		//// YOUR CODE GOES ABOVE HERE ////
 
-		// Final exit platform
+		// Final exit is on flat ground in the last 3 blocks.
 		for (int x = width-EXITOFFSET; x < width; x++)
 		{
 			this.setBlock(x, DEFAULTHEIGHT-2, HILL_TOP);
 			this.setBlock(x, DEFAULTHEIGHT-1, GROUND);
 		}
 
-		// Place the exit
 		xExit = width-EXITPOSITION;
 		yExit = DEFAULTHEIGHT-2;
 
 	}
 	
+
+
 	/* BELOW HERE ARE EXAMPLE FUNCTIONS FOR HOW TO CREATE SOME INTERESTING STRUCTURES */
 
 

@@ -146,6 +146,7 @@ public class MyLevelGenerator{
 		return solution;
 	}
 	
+	// Create a random individual.
 	private MyDNA generateRandomIndividual ()
 	{
 		MyDNA individual = new MyDNA();
@@ -155,6 +156,7 @@ public class MyLevelGenerator{
 		return individual;
 	}
 	
+	// Returns true if the genetic algorithm should terminate.
 	private boolean terminate (ArrayList<MyDNA> population, int count)
 	{
 		boolean decision = false;
@@ -164,6 +166,7 @@ public class MyLevelGenerator{
 		return decision;
 	}
 	
+	// Return a list of individuals that should be copied and mutated.
 	private ArrayList<MyDNA> selectIndividualsForMutation (ArrayList<MyDNA> population)
 	{
 		ArrayList<MyDNA> selected = new ArrayList<MyDNA>();
@@ -173,6 +176,7 @@ public class MyLevelGenerator{
 		return selected;
 	}
 	
+	// Returns the size of the population.
 	private int getPopulationSize ()
 	{
 		int num = 1; // Default needs to be changed
@@ -182,6 +186,7 @@ public class MyLevelGenerator{
 		return num;
 	}
 	
+	// Returns the number of times crossover should happen per iteration.
 	private int numberOfCrossovers ()
 	{
 		int num = 0; // Default is no crossovers
@@ -207,6 +212,8 @@ public class MyLevelGenerator{
 		}
 	}
 	
+	// Returns true if children compete to replace parents.
+	// Retursn false if the the global population competes.
 	private boolean competeWithParentsOnly ()
 	{
 		boolean doit = false;
@@ -216,6 +223,7 @@ public class MyLevelGenerator{
 		return doit;
 	}
 	
+	// Determine if children are fitter than parents and keep the fitter ones.
 	private ArrayList<MyDNA> competeWithParents (ArrayList<MyDNA> oldPopulation, ArrayList<MyDNA> newPopulation, Hashtable parents)
 	{
 		ArrayList<MyDNA> finalPopulation = new ArrayList<MyDNA>();
@@ -229,6 +237,7 @@ public class MyLevelGenerator{
 		return finalPopulation;
 	}
 	
+	// Combine the old population and the new population and return the top fittest individuals.
 	private ArrayList<MyDNA> globalCompetition (ArrayList<MyDNA> oldPopulation, ArrayList<MyDNA> newPopulation)
 	{
 		ArrayList<MyDNA> finalPopulation = new ArrayList<MyDNA>();
@@ -242,6 +251,7 @@ public class MyLevelGenerator{
 		return finalPopulation;
 	}
 	
+	// Return the fittest individual in the population.
 	private MyDNA getBestIndividual (ArrayList<MyDNA> population)
 	{
 		MyDNA best = population.get(0);
@@ -257,7 +267,7 @@ public class MyLevelGenerator{
 		return best;
 	}
 	
-	// Changing this function is optional
+	// Changing this function is optional.
 	private double evaluateFitness (MyDNA dna, PlayerProfile playerProfile)
 	{
 		double fitness = 0.0;

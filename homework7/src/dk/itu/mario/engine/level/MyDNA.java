@@ -11,6 +11,8 @@ import java.util.*;
 public class MyDNA extends DNA
 {
 	
+	public int numGenes = 0; //number of genes
+
 	// Return a new DNA that differs from this one in a small way.
 	// Do not change this DNA by side effect; copy it, change the copy, and return the copy.
 	public MyDNA mutate ()
@@ -56,6 +58,10 @@ public class MyDNA extends DNA
 		return s;
 	}
 	
+	public void setNumGenes (int n)
+	{
+		this.numGenes = n;
+	}
 
 }
 

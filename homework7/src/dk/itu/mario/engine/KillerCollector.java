@@ -66,7 +66,7 @@ public class KillerCollector extends PlayerProfile{
 			coinScore = 1.0;
 		}
 
-		double score = ((coinScore + killerScore) / 2.0) * (1 - (Math.abs(numCoins-numTrues)/2.0));
+		double score = ((coinScore + killerScore) / 2.0) * (1 - (Math.abs(numCoins-2*numTrues)/(numCoins+2*numTrues)));
 
 		return score;
 	}
