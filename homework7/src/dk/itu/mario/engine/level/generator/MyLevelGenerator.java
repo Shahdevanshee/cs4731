@@ -156,7 +156,7 @@ public class MyLevelGenerator{
         String alpha = "abcdefghijklmnopqrstuvwxyz";
         String s = "";
         for (int i = 0; i < 4; i++) {
-            s += alpha.charAt(r.nextInt(26));
+            s += alpha.charAt(r.nextInt(alpha.length()));
         }
         individual.setChromosome(s);
         // YOUR CODE GOES ABOVE HERE
@@ -169,8 +169,11 @@ public class MyLevelGenerator{
         boolean decision = false;
         // YOUR CODE GOES BELOW HERE
         // TODO
-        if (population.size() >= count) {
-            decision = true;
+        // terminate after 1000 iterations or after fitness level has reached some amount
+        for (MyDNA d : population) {
+            if ((d.getFitness() >= 0.85) || (count > 1000)) {
+                decision = true;
+            }
         }
         // YOUR CODE GOES ABOVE HERE
         return decision;

@@ -22,7 +22,7 @@ public class MyDNA extends DNA
         String alpha = "abcdefghijklmnopqrstuvwxyz";
         Random r = new Random();
         int loc = r.nextInt(this.getChromosome().length());
-        int letter = r.nextInt(26);
+        int letter = r.nextInt(alpha.length());
         String ret = "";
         for (int i = 0; i < this.getChromosome().length(); i++) {
             if (i == loc) {
@@ -42,6 +42,7 @@ public class MyDNA extends DNA
     {
         ArrayList<MyDNA> offspring = new ArrayList<MyDNA>();
         //YOUR CODE GOES BELOW HERE
+        // TODO might want this to be random
         int middle1 = (int)(this.getChromosome().length() / 2);
         int middle2 = (int)(mate.getChromosome().length() / 2);
         // System.out.println("middle1: " + middle1);

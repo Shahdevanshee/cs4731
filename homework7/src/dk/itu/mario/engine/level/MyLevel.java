@@ -46,6 +46,14 @@ public class MyLevel extends Level{
 
         // Start your level at block index STARTOFFSET.
         //// YOUR CODE GOES BELOW HERE ////
+        for (int i = STARTOFFSET; i < width-EXITOFFSET; i++) {
+            this.setBlock(i, DEFAULTHEIGHT-2, HILL_TOP);
+            this.setBlock(i, DEFAULTHEIGHT-1, GROUND);
+
+            // this.setBlock(i, DEFAULTHEIGHT-4, COIN);
+        }
+        // int i = buildJump(STARTOFFSET, 5);
+        // buildHillStraight(STARTOFFSET, 30, 2);
 
 
         //// YOUR CODE GOES ABOVE HERE ////
