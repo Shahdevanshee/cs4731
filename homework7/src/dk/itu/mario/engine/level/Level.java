@@ -10,12 +10,12 @@ public class Level implements LevelInterface
 {
 
     public static final byte EMPTY    = (byte) (0);
-    public static final byte BLOCK_EMPTY	= (byte) (0 + 1 * 16);
-    public static final byte BLOCK_POWERUP	= (byte) (4 + 2 + 1 * 16);
-    public static final byte BLOCK_COIN	= (byte) (4 + 1 + 1 * 16);
-    public static final byte GROUND		= (byte) (1 + 9 * 16);
-    public static final byte ROCK			= (byte) (9 + 0 * 16);
-    public static final byte COIN			= (byte) (2 + 2 * 16);
+    public static final byte BLOCK_EMPTY    = (byte) (0 + 1 * 16);
+    public static final byte BLOCK_POWERUP  = (byte) (4 + 2 + 1 * 16);
+    public static final byte BLOCK_COIN = (byte) (4 + 1 + 1 * 16);
+    public static final byte GROUND     = (byte) (1 + 9 * 16);
+    public static final byte ROCK           = (byte) (9 + 0 * 16);
+    public static final byte COIN           = (byte) (2 + 2 * 16);
 
     public static final byte LEFT_GRASS_EDGE = (byte) (0+9*16);
     public static final byte RIGHT_GRASS_EDGE = (byte) (2+9*16);
@@ -91,15 +91,15 @@ public class Level implements LevelInterface
         Level clone=new Level(width, height);
 
         clone.map = new byte[width][height];
-    	clone.spriteTemplates = new SpriteTemplate[width][height];
-    	clone.xExit = xExit;
-    	clone.yExit = yExit;
+        clone.spriteTemplates = new SpriteTemplate[width][height];
+        clone.xExit = xExit;
+        clone.yExit = yExit;
 
-    	for (int i = 0; i < map.length; i++)
-    		for (int j = 0; j < map[i].length; j++) {
-    			clone.map[i][j]= map[i][j];
-    			clone.spriteTemplates[i][j] = spriteTemplates[i][j];
-    	}
+        for (int i = 0; i < map.length; i++)
+            for (int j = 0; j < map[i].length; j++) {
+                clone.map[i][j]= map[i][j];
+                clone.spriteTemplates[i][j] = spriteTemplates[i][j];
+        }
 
         return clone;
 
@@ -164,57 +164,57 @@ public class Level implements LevelInterface
     }
 
     public SpriteTemplate[][] getSpriteTemplate(){
-    	return this.spriteTemplates;
+        return this.spriteTemplates;
     }
 
     public void resetSpriteTemplate(){
-    	for (int i = 0; i < spriteTemplates.length; i++) {
-			for (int j = 0; j < spriteTemplates[i].length; j++) {
+        for (int i = 0; i < spriteTemplates.length; i++) {
+            for (int j = 0; j < spriteTemplates[i].length; j++) {
 
-				SpriteTemplate st = spriteTemplates[i][j];
-				if(st != null)
-					st.isDead = false;
-			}
-		}
+                SpriteTemplate st = spriteTemplates[i][j];
+                if(st != null)
+                    st.isDead = false;
+            }
+        }
     }
 
 
     public void print(byte[][] array){
-    	for (int i = 0; i < array.length; i++) {
-			for (int j = 0; j < array[i].length; j++) {
-				System.out.print(array[i][j]);
-			}
-			System.out.println();
-		}
+        for (int i = 0; i < array.length; i++) {
+            for (int j = 0; j < array[i].length; j++) {
+                System.out.print(array[i][j]);
+            }
+            System.out.println();
+        }
     }
-	public byte[][] getMap() {
-		return map;
-	}
-	public SpriteTemplate[][] getSpriteTemplates() {
-		return spriteTemplates;
-	}
-	public int getxExit() {
-		// TODO Auto-generated method stub
-		return xExit;
-	}
-	public int getyExit() {
-		// TODO Auto-generated method stub
-		return yExit;
-	}
-	public int getWidth() {
-		// TODO Auto-generated method stub
-		return width;
-	}
-	public int getHeight() {
-		// TODO Auto-generated method stub
-		return height;
-	}
+    public byte[][] getMap() {
+        return map;
+    }
+    public SpriteTemplate[][] getSpriteTemplates() {
+        return spriteTemplates;
+    }
+    public int getxExit() {
+        // TODO Auto-generated method stub
+        return xExit;
+    }
+    public int getyExit() {
+        // TODO Auto-generated method stub
+        return yExit;
+    }
+    public int getWidth() {
+        // TODO Auto-generated method stub
+        return width;
+    }
+    public int getHeight() {
+        // TODO Auto-generated method stub
+        return height;
+    }
 
 
-	public String getName() {
-		// TODO Auto-generated method stub
-		return "";
-	}
+    public String getName() {
+        // TODO Auto-generated method stub
+        return "";
+    }
 
 
 }
