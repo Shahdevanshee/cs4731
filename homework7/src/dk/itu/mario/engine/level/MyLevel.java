@@ -46,14 +46,43 @@ public class MyLevel extends Level{
 
         // Start your level at block index STARTOFFSET.
         //// YOUR CODE GOES BELOW HERE ////
-        for (int i = STARTOFFSET; i < width-EXITOFFSET; i++) {
-            this.setBlock(i, DEFAULTHEIGHT-2, HILL_TOP);
-            this.setBlock(i, DEFAULTHEIGHT-1, GROUND);
+        random = new Random();
 
-            // this.setBlock(i, DEFAULTHEIGHT-4, COIN);
-        }
-        // int i = buildJump(STARTOFFSET, 5);
-        // buildHillStraight(STARTOFFSET, 30, 2);
+        // creates straight path from STARTOFFSET to width-EXITOFFSET
+        // for (int i = STARTOFFSET; i < width-EXITOFFSET; i++) {
+        //     this.setBlock(i, DEFAULTHEIGHT-2, HILL_TOP);
+        //     this.setBlock(i, DEFAULTHEIGHT-1, GROUND);
+        // }
+
+        // add coins to game
+        // this.setBlock(STARTOFFSET, DEFAULTHEIGHT-4, COIN);
+
+        // stairs + ground
+        // this.buildJump(STARTOFFSET, 5);
+
+        // bullet bill
+        // this.buildCannons(STARTOFFSET, 5);
+
+        // raised hills
+        // this.buildHillStraight(STARTOFFSET, 30, 5);
+
+        // add line of enemies... add ground underneath so they don't die
+        // this.addEnemyLine(STARTOFFSET, width-EXITOFFSET, DEFAULTHEIGHT-8, 10);
+
+        // set enemy at specific location... see Enemy.java or SpriteTemplate.java
+        // this.setSpriteTemplate(20, DEFAULTHEIGHT-3, new SpriteTemplate(4, false));
+
+        // build pipes
+        // this.buildTubes(STARTOFFSET, width-EXITOFFSET, 5);
+
+        // build path with ground
+        // this.buildStraight(STARTOFFSET, width-EXITOFFSET, true, 5);
+
+        // decorate... puts everything in there, coins, enemies, blocks
+        // decorate(STARTOFFSET, width-EXITOFFSET-STARTOFFSET, 10, 5);
+
+        // Adds hill_top so you don't fall down
+        fixWalls();
 
 
         //// YOUR CODE GOES ABOVE HERE ////
