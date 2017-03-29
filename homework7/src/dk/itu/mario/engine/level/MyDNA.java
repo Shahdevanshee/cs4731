@@ -28,7 +28,7 @@ public class MyDNA extends DNA
             if (i == loc) {
                 ret += alpha.charAt(letter);
             } else {
-                ret += copy.getChromosome().charAt(i);
+                ret += this.getChromosome().charAt(i);
             }
         }
         copy.setChromosome(ret);

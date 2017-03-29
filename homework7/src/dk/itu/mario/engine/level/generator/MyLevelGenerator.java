@@ -62,7 +62,7 @@ public class MyLevelGenerator{
         }
 
         // Iteration counter
-        int count = 0;
+        int count = 1;
 
         // Iterate until termination criteria met
         while (!this.terminate(population, count)) {
@@ -74,7 +74,6 @@ public class MyLevelGenerator{
 
             // Mutuate a number of individuals
             ArrayList<MyDNA> mutationPool = this.selectIndividualsForMutation(population);
-            System.out.println("mutationPool: " + mutationPool);
             for (int i=0; i < mutationPool.size(); i++) {
                 MyDNA parent = mutationPool.get(i);
                 // Mutate
@@ -184,13 +183,12 @@ public class MyLevelGenerator{
         // YOUR CODE GOES BELOW HERE
         // TODO
         // System.out.println(population.size());
-        // int chosen_ones = r.nextInt(population.size());
+        int chosen_ones = r.nextInt(population.size()) + 1;
         // System.out.println(chosen_ones);
         // System.out.println("population: " + population);
-        // for (int i = 0; i < population.size(); i++) {
-        //     selected.add(population.get(i));
-        // }
-        // selected = population;
+        for (int i = 0; i < chosen_ones; i++) {
+            selected.add(population.get(i));
+        }
 
         // YOUR CODE GOES ABOVE HERE
         return selected;
@@ -199,10 +197,10 @@ public class MyLevelGenerator{
     // Returns the size of the population.
     private int getPopulationSize ()
     {
-        int num = 2; // Default needs to be changed
+        int num = 1; // Default needs to be changed
         // YOUR CODE GOES BELOW HERE
         // TODO
-        // num = 20;
+        num = 10;
         // YOUR CODE GOES ABOVE HERE
         return num;
     }
@@ -210,10 +208,10 @@ public class MyLevelGenerator{
     // Returns the number of times crossover should happen per iteration.
     private int numberOfCrossovers ()
     {
-        int num = 1; // Default is no crossovers
+        int num = 0; // Default is no crossovers
         // YOUR CODE GOES BELOW HERE
         // TODO
-        // num = 15;
+        num = 2;
         // YOUR CODE GOES ABOVE HERE
         return num;
 
@@ -225,12 +223,12 @@ public class MyLevelGenerator{
         MyDNA picked = null;
         // YOUR CODE GOES BELOW HERE
         // System.out.println(population.size());
-        // int chosen = r.nextInt(population.size());
-        // for (int i = 0; i < population.size(); i++) {
-        //     if (i == chosen) {
-        //         picked = population.get(i);
-        //     }
-        // }
+        int chosen = r.nextInt(population.size()) + 1;
+        for (int i = 0; i < population.size(); i++) {
+            if (i == chosen) {
+                picked = population.get(i);
+            }
+        }
 
         // YOUR CODE GOES ABOVE HERE
         if (picked == excludeMe) {
@@ -275,7 +273,7 @@ public class MyLevelGenerator{
         ArrayList<MyDNA> total = new ArrayList<MyDNA>();
         total.addAll(oldPopulation);
         total.addAll(newPopulation);
-        System.out.println(total);
+        // System.out.println(total);
         if (total.size() == this.getPopulationSize()) {
             finalPopulation = total;
         } else {
