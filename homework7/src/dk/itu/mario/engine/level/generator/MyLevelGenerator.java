@@ -20,6 +20,7 @@ public class MyLevelGenerator{
     public boolean verbose = true; //print debugging info
 
     // MAKE ANY NEW MEMBER VARIABLES HERE
+    public Random r = new Random();
 
     // Called by the game engine.
     // Returns the level to be played.
@@ -73,6 +74,7 @@ public class MyLevelGenerator{
 
             // Mutuate a number of individuals
             ArrayList<MyDNA> mutationPool = this.selectIndividualsForMutation(population);
+            System.out.println("mutationPool: " + mutationPool);
             for (int i=0; i < mutationPool.size(); i++) {
                 MyDNA parent = mutationPool.get(i);
                 // Mutate
@@ -151,7 +153,13 @@ public class MyLevelGenerator{
     {
         MyDNA individual = new MyDNA();
         // YOUR CODE GOES BELOW HERE
-
+        // TODO
+        String alpha = "abcdefghijklmnopqrstuvwxyz";
+        String s = "";
+        for (int i = 0; i < 4; i++) {
+            s += alpha.charAt(r.nextInt(26));
+        }
+        individual.setChromosome(s);
         // YOUR CODE GOES ABOVE HERE
         return individual;
     }
@@ -161,7 +169,10 @@ public class MyLevelGenerator{
     {
         boolean decision = false;
         // YOUR CODE GOES BELOW HERE
-
+        // TODO
+        if (population.size() >= count) {
+            decision = true;
+        }
         // YOUR CODE GOES ABOVE HERE
         return decision;
     }
@@ -171,6 +182,15 @@ public class MyLevelGenerator{
     {
         ArrayList<MyDNA> selected = new ArrayList<MyDNA>();
         // YOUR CODE GOES BELOW HERE
+        // TODO
+        // System.out.println(population.size());
+        // int chosen_ones = r.nextInt(population.size());
+        // System.out.println(chosen_ones);
+        // System.out.println("population: " + population);
+        // for (int i = 0; i < population.size(); i++) {
+        //     selected.add(population.get(i));
+        // }
+        // selected = population;
 
         // YOUR CODE GOES ABOVE HERE
         return selected;
@@ -181,6 +201,7 @@ public class MyLevelGenerator{
     {
         int num = 2; // Default needs to be changed
         // YOUR CODE GOES BELOW HERE
+        // TODO
         // num = 20;
         // YOUR CODE GOES ABOVE HERE
         return num;
@@ -189,8 +210,9 @@ public class MyLevelGenerator{
     // Returns the number of times crossover should happen per iteration.
     private int numberOfCrossovers ()
     {
-        int num = 0; // Default is no crossovers
+        int num = 1; // Default is no crossovers
         // YOUR CODE GOES BELOW HERE
+        // TODO
         // num = 15;
         // YOUR CODE GOES ABOVE HERE
         return num;
@@ -202,6 +224,13 @@ public class MyLevelGenerator{
     {
         MyDNA picked = null;
         // YOUR CODE GOES BELOW HERE
+        // System.out.println(population.size());
+        // int chosen = r.nextInt(population.size());
+        // for (int i = 0; i < population.size(); i++) {
+        //     if (i == chosen) {
+        //         picked = population.get(i);
+        //     }
+        // }
 
         // YOUR CODE GOES ABOVE HERE
         if (picked == excludeMe) {
@@ -213,7 +242,7 @@ public class MyLevelGenerator{
     }
 
     // Returns true if children compete to replace parents.
-    // Retursn false if the the global population competes.
+    // Returns false if the the global population competes.
     private boolean competeWithParentsOnly ()
     {
         boolean doit = false;
@@ -242,6 +271,7 @@ public class MyLevelGenerator{
     {
         ArrayList<MyDNA> finalPopulation = new ArrayList<MyDNA>();
         // YOUR CODE GOES BELOW HERE
+        // TODO
         ArrayList<MyDNA> total = new ArrayList<MyDNA>();
         total.addAll(oldPopulation);
         total.addAll(newPopulation);
@@ -249,8 +279,6 @@ public class MyLevelGenerator{
         if (total.size() == this.getPopulationSize()) {
             finalPopulation = total;
         } else {
-            int extra = total.size() - this.getPopulationSize();
-
             // Map<MyDNA, Double> fitness_map = new HashMap<>();
             // for (MyDNA d : total) {
             //     fitness_map.put(d, d.getFitness());
@@ -259,8 +287,11 @@ public class MyLevelGenerator{
             //     System.out.println(d);
             //     System.out.println(fitness_map.get(d));
             // }
+
             for (int i = 0; i < this.getPopulationSize(); i++) {
-                finalPopulation.add(total.get(i));
+                MyDNA best = getBestIndividual(total);
+                total.remove(best);
+                finalPopulation.add(best);
             }
         }
         // YOUR CODE GOES ABOVE HERE

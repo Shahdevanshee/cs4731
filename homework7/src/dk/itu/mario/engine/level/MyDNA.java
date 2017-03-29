@@ -32,7 +32,7 @@ public class MyDNA extends DNA
             }
         }
         copy.setChromosome(ret);
-        System.out.println(copy.getLength());
+        // System.out.println(copy.getLength());
         //YOUR CODE GOES ABOVE HERE
         return copy;
     }
