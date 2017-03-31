@@ -32,7 +32,6 @@ public class MyDNA extends DNA
             }
         }
         copy.setChromosome(ret);
-        // System.out.println(copy.getLength());
         //YOUR CODE GOES ABOVE HERE
         return copy;
     }
@@ -43,20 +42,13 @@ public class MyDNA extends DNA
         ArrayList<MyDNA> offspring = new ArrayList<MyDNA>();
         //YOUR CODE GOES BELOW HERE
         // TODO might want this to be random
-        int middle1 = (int)(this.getChromosome().length() / 2);
-        int middle2 = (int)(mate.getChromosome().length() / 2);
-        // System.out.println("middle1: " + middle1);
-        // System.out.println("middle2: " + middle2);
+        Random r = new Random();
+        int middle = (int)(r.nextInt(this.getChromosome().length()));
         MyDNA child1 = new MyDNA();
         MyDNA child2 = new MyDNA();
 
-        // System.out.println(this.getChromosome().substring(0, middle1));
-        // System.out.println(mate.getChromosome().substring(middle2, mate.getChromosome().length()));
-        // System.out.println(mate.getChromosome().substring(0, middle2));
-        // System.out.println(this.getChromosome().substring(middle1, this.getChromosome().length()));
-
-        String one = this.getChromosome().substring(0, middle1) + mate.getChromosome().substring(middle2, mate.getChromosome().length());
-        String two = mate.getChromosome().substring(0, middle2) + this.getChromosome().substring(middle1, this.getChromosome().length());
+        String one = this.getChromosome().substring(0, middle) + mate.getChromosome().substring(middle, mate.getChromosome().length());
+        String two = mate.getChromosome().substring(0, middle) + this.getChromosome().substring(middle, this.getChromosome().length());
 
         child1.setChromosome(one);
         child2.setChromosome(two);

@@ -49,10 +49,10 @@ public class MyLevel extends Level{
         random = new Random();
 
         // creates straight path from STARTOFFSET to width-EXITOFFSET
-        // for (int i = STARTOFFSET; i < width-EXITOFFSET; i++) {
-        //     this.setBlock(i, DEFAULTHEIGHT-2, HILL_TOP);
-        //     this.setBlock(i, DEFAULTHEIGHT-1, GROUND);
-        // }
+        for (int i = STARTOFFSET; i < width-EXITOFFSET; i++) {
+            this.setBlock(i, DEFAULTHEIGHT-2, HILL_TOP);
+            this.setBlock(i, DEFAULTHEIGHT-1, GROUND);
+        }
 
         // add coins to game
         // this.setBlock(STARTOFFSET, DEFAULTHEIGHT-4, COIN);
@@ -82,7 +82,20 @@ public class MyLevel extends Level{
         // decorate(STARTOFFSET, width-EXITOFFSET-STARTOFFSET, 10, 5);
 
         // Adds hill_top so you don't fall down
-        fixWalls();
+        String chromosome = dna.getChromosome();
+        for (int i = 0; i < chromosome.length(); i++) {
+            // this.setBlock(i, DEFAULTHEIGHT-2, HILL_TOP);
+            // this.setBlock(i, DEFAULTHEIGHT-1, GROUND);
+            char c = chromosome.charAt(i);
+            if (c == 'c') {
+                this.setBlock(i + STARTOFFSET, DEFAULTHEIGHT-3, COIN);
+            } else if (c == 'j') {
+                this.setBlock(i + STARTOFFSET, DEFAULTHEIGHT-3, ROCK);
+            } else if (c == 'k') {
+                this.setSpriteTemplate(i + STARTOFFSET, DEFAULTHEIGHT-3, new SpriteTemplate(2, false));
+            }
+        }
+        // fixWalls();
 
 
         //// YOUR CODE GOES ABOVE HERE ////

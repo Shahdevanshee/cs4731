@@ -152,10 +152,10 @@ public class MyLevelGenerator{
     {
         MyDNA individual = new MyDNA();
         // YOUR CODE GOES BELOW HERE
-        // TODO
+        // TODO need to have this longer -- maybe length of level
         String alpha = "abcdefghijklmnopqrstuvwxyz";
         String s = "";
-        for (int i = 0; i < 4; i++) {
+        for (int i = 0; i < 195; i++) {
             s += alpha.charAt(r.nextInt(alpha.length()));
         }
         individual.setChromosome(s);
@@ -171,7 +171,7 @@ public class MyLevelGenerator{
         // TODO
         // terminate after 1000 iterations or after fitness level has reached some amount
         for (MyDNA d : population) {
-            if ((d.getFitness() >= 0.85) || (count > 1000)) {
+            if ((d.getFitness() > 0.80) || (count > 1000)) {
                 decision = true;
             }
         }
@@ -185,14 +185,10 @@ public class MyLevelGenerator{
         ArrayList<MyDNA> selected = new ArrayList<MyDNA>();
         // YOUR CODE GOES BELOW HERE
         // TODO
-        // System.out.println(population.size());
         int chosen_ones = r.nextInt(population.size()) + 1;
-        // System.out.println(chosen_ones);
-        // System.out.println("population: " + population);
         for (int i = 0; i < chosen_ones; i++) {
             selected.add(population.get(i));
         }
-
         // YOUR CODE GOES ABOVE HERE
         return selected;
     }
@@ -202,8 +198,8 @@ public class MyLevelGenerator{
     {
         int num = 1; // Default needs to be changed
         // YOUR CODE GOES BELOW HERE
-        // TODO
-        num = 10;
+        // TODO big population
+        num = 300;
         // YOUR CODE GOES ABOVE HERE
         return num;
     }
@@ -213,8 +209,8 @@ public class MyLevelGenerator{
     {
         int num = 0; // Default is no crossovers
         // YOUR CODE GOES BELOW HERE
-        // TODO
-        num = 2;
+        // TODO half of population size
+        num = 150;
         // YOUR CODE GOES ABOVE HERE
         return num;
 
@@ -225,7 +221,6 @@ public class MyLevelGenerator{
     {
         MyDNA picked = null;
         // YOUR CODE GOES BELOW HERE
-        // System.out.println(population.size());
         int chosen = r.nextInt(population.size()) + 1;
         for (int i = 0; i < population.size(); i++) {
             if (i == chosen) {
@@ -276,19 +271,10 @@ public class MyLevelGenerator{
         ArrayList<MyDNA> total = new ArrayList<MyDNA>();
         total.addAll(oldPopulation);
         total.addAll(newPopulation);
-        // System.out.println(total);
+
         if (total.size() == this.getPopulationSize()) {
             finalPopulation = total;
         } else {
-            // Map<MyDNA, Double> fitness_map = new HashMap<>();
-            // for (MyDNA d : total) {
-            //     fitness_map.put(d, d.getFitness());
-            // }
-            // for (MyDNA d : fitness_map.keySet()) {
-            //     System.out.println(d);
-            //     System.out.println(fitness_map.get(d));
-            // }
-
             for (int i = 0; i < this.getPopulationSize(); i++) {
                 MyDNA best = getBestIndividual(total);
                 total.remove(best);
@@ -333,6 +319,7 @@ public class MyLevelGenerator{
     private MyDNA postProcess (MyDNA dna)
     {
         // YOUR CODE GOES BELOW HERE
+        // TODO might have to modify if you have pits
 
         // YOUR CODE GOES ABOVE HERE
         return dna;
