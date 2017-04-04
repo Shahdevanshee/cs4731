@@ -236,8 +236,8 @@ class Hero(MOBAAgent):
 			pygame.draw.circle(self.world.background, (255, 0, 0), (int(self.getLocation()[0]), int(self.getLocation()[1])), int(self.getRadius()*2), 1)
 			for x in self.world.getEnemyNPCs(self.getTeam()) + self.world.getEnemyBases(self.getTeam()) + self.world.getEnemyTowers(self.getTeam()):
 				if distance(self.getLocation(), x.getLocation()) < (self.getRadius()*AREAEFFECTRANGE)+(x.getRadius()):
-					x.damage(self.areaEffectDamage + self.level)
 					x.lastDamagedBy = self
+					x.damage(self.areaEffectDamage + self.level)
 					self.world.damageCaused(self, x, self.areaEffectDamage)
 			return True
 		return False

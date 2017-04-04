@@ -212,6 +212,7 @@ agent.team = 0
 world.debugging = True
 
 # create AStarNavigator using student's astar module
+nav1.setAgent(agent)
 nav1.setWorld(world)
 
 b1 = Base(BASE, (75, 75), world, 1, MyHumanMinion, MyHumanHero, BUILDRATE)
@@ -225,6 +226,7 @@ world.addTower(t12)
 
 
 # create AStarNavigator using student's astar module
+nav2.setAgent(agent)
 nav2.setWorld(world)
 
 b2 = Base(BASE, (1125, 1125), world, 2, MyAlienMinion, MyAlienHero, BUILDRATE)

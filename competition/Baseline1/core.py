@@ -333,7 +333,7 @@ class Agent(Mover):
 	def damage(self, amount):
 		self.hitpoints = self.hitpoints - amount
 		### Something should happen when hitpoints are <= 0
-		if self.hitpoints < 0:
+		if self.hitpoints <= 0:
 			self.die()
 
 	def die(self):

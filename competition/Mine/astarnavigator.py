@@ -29,7 +29,7 @@ from mynavigatorhelpers import *
 ###############################
 ### AStarNavigator
 ###
-### Creates a path node network and implements the FloydWarshall all-pairs shortest-path algorithm to create a path to the given destination.
+### Creates a path node network and implements the A* algorithm to create a path to the given destination.
 			
 class AStarNavigator(NavMeshNavigator):
 
@@ -37,7 +37,7 @@ class AStarNavigator(NavMeshNavigator):
 		NavMeshNavigator.__init__(self)
 		
 
-	### Create the pathnode network and pre-compute all shortest paths along the network.
+	### Create the path node network and pre-compute all shortest paths along the network.
 	### self: the navigator object
 	### world: the world object
 	def createPathNetwork(self, world):
@@ -46,10 +46,11 @@ class AStarNavigator(NavMeshNavigator):
 		
 	### Finds the shortest path from the source to the destination using A*.
 	### self: the navigator object
-	### source: the place the agent is starting from (i.e., it's current location)
+	### source: the place the agent is starting from (i.e., its current location)
 	### dest: the place the agent is told to go to
 	def computePath(self, source, dest):
-		### Make sure the next and dist matricies exist
+		self.setPath(None)
+		### Make sure the next and dist matrices exist
 		if self.agent != None and self.world != None: 
 			self.source = source
 			self.destination = dest
@@ -57,8 +58,8 @@ class AStarNavigator(NavMeshNavigator):
 			###   Determine if there are no obstacles between source and destination (hint: cast rays against world.getLines(), check for clearance).
 			###   Tell the agent to move to dest
 			### Step 2: If there is an obstacle, create the path that will move around the obstacles.
-			###   Find the pathnodes closest to source and destination.
-			###   Create the path by traversing the self.next matrix until the pathnode closes to the destination is reached
+			###   Find the path nodes closest to source and destination.
+			###   Create the path by traversing the self.next matrix until the path node closest to the destination is reached
 			###   Store the path by calling self.setPath()
 			###   Tell the agent to move to the first node in the path (and pop the first node off the path)
 			if clearShot(source, dest, self.world.getLines(), self.world.getPoints(), self.agent):
@@ -67,9 +68,9 @@ class AStarNavigator(NavMeshNavigator):
 				start = findClosestUnobstructed(source, self.pathnodes, self.world.getLinesWithoutBorders())
 				end = findClosestUnobstructed(dest, self.pathnodes, self.world.getLinesWithoutBorders())
 				if start != None and end != None:
-					print len(self.pathnetwork)
+					# print len(self.pathnetwork)
 					newnetwork = unobstructedNetwork(self.pathnetwork, self.world.getGates())
-					print len(newnetwork)
+					# print len(newnetwork)
 					closedlist = []
 					path, closedlist = astar(start, end, newnetwork)
 					if path is not None and len(path) > 0:
@@ -86,7 +87,7 @@ class AStarNavigator(NavMeshNavigator):
 		myCheckpoint(self)
 		return None
 
-	### This function gets called by the agent to figure out if some shortcutes can be taken when traversing the path.
+	### This function gets called by the agent to figure out if some shortcuts can be taken when traversing the path.
 	### This function should update the path and return True if the path was updated.
 	def smooth(self):
 		return mySmooth(self)
@@ -131,3 +132,16 @@ def myCheckpoint(nav):
 
 	### YOUR CODE GOES ABOVE HERE ###
 	return None
+
+
+### Returns true if the agent can get from p1 to p2 directly without running into an obstacle.
+### p1: the current location of the agent
+### p2: the destination of the agent
+### worldLines: all the lines in the world
+### agent: the Agent object
+def clearShot(p1, p2, worldLines, worldPoints, agent):
+	### YOUR CODE GOES BELOW HERE ###
+	
+	### YOUR CODE GOES ABOVE HERE ###
+	return False
+
