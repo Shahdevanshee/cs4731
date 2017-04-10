@@ -1,0 +1,90 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>Squad Homework</title>
+</head>
+
+<body>
+<h1>Camera Control Homework</h1>
+<p>In this assignment, you will implement a camera control AI that attempts to keep a number of non-player characters in view at all times. This assignment uses the <a href="http://unity3d.com">Unity3D</a> game engine, a freely available 3D game engine that uses the C# programming language.</p>
+<p>We have set up a 3D environment with a number of small dinosaurs running around randomly. You must implement a camera control AI that keeps the dinosaurs in view at all times, no matter where they go. </p>
+<p><a href="camera-game.png"><img src="camera-game.png" width="640" border="1" /></a></p>
+<p>You should base your camera control AI on the ConstraintCam technique described in the paper, <a href="bares99.pdf">Intelligent Multi-shot Visualization Interfaces for Dynamic 3D Worlds</a>.</p>
+<p>Your camera control AI should prefer to view the dinosaurs from the front (between 45 degrees and -45 degrees from the front of the dinosaurs) and to get in as close to the dinosaurs as it can without losing sight of the other dinosaurs.</p>
+<p>If it is impossible to keep all dinosaurs in view, it should keep as many in view as possible. The camera AI should relax the preference for viewing the dinosaurs from the front before dropping a dinosaur completely from view. You do not need to implement split-screen viewing. </p>
+<hr />
+<h2>ConstraintCam in a Nutshell</h2>
+<p>Please consult <a href="bares99.pdf">Intelligent Multi-shot Visualization Interfaces for Dynamic 3D Worlds</a> for a complete discription of the ConstraintCam algorithm. The following is a concise overview.</p>
+<p>ConstraintCam attempts to find a position and orientation for a virtual camera in 3D space that keeps multiple target NPCs visible at all times AND views the NPCs from a preferred angle. </p>
+<p>Consider the image below, which shows a top-down view of an NPC. The desire is to view the NPC from 90 degrees (from the front), but any angle between 45 and 180 degrees would be acceptable. The green box is a wall that would occlude the camera if it were between the NPC and the camera. We can see that the camera's  should be placed just to the right of the wall, somewhere between 45 and 90 degrees.</p>
+<p><a href="camera-example-1.png"><img src="camera-example-1.png" border="1" /></a></p>
+<p>To automatically compute the camera position for the case of one NPC, it is advantageous to work in polar coordinates, where any position in 3D space relative to the NPC can be defined as an angle on imaginary circle around the NPC, the angle above the ground, and the distance from the NPC. In the above, we are just considering the angle around the imaginary circle.</p>
+<p>To find an area in the 3D world that is consistent with the viewing preference and guaranteed not to occlude the view of the NPC, the figure below shows what the vantage-consistent region would look like in polar coordinate space (ignoring distance) and what the obstacle looks like in polar coordinate space (ignoring distance). View cones look like squares (cubes when distance is added in), which are easy to work with.</p>
+<p><a href="camera-example-2.png"><img src="camera-example-2.png" border="1" /></a></p>
+<p>Doing a simple intersection of squares (or cubes) yields a space where the camera can be placed. Pick any point in this space as an angle around circle, angle above ground (and distance) for the placement of the virtual camera. Ideally, this point will be the one closest to the optimal viewpoint (e.g., 90 degrees in this example to see the NPC from directly in front). Then translate the polar coordinates back into Cartesian coordinates.</p>
+<p><a href="camera-example-3.png"><img src="camera-example-3.png" border="1" /></a></p>
+<p>Distance is not shown in the above example, but there will also be a preferred viewing distance, a minimum acceptable distance, and a maximum acceptable distance.</p>
+<p>It is left as an exercise how to extend the technique to 2+ NPCs and to incorporate distance constraints.</p>
+<p>If the constraint consistent region is empty, then there is no point at which the camera can be placed that meets all viewpoint constraints. When this happens, one or more constraints must be relaxed. First try removing the distance constraint and recomputing the view area. If that also fails, remove the prefered minimum and maximum view angle from one or more NPCs until the view area has a solution.</p>
+<p>The virtual camera must also have an orientation. The camera should be oriented toward the mean position between all NPCs. This may require the camera to move farther back from the NPCs to keep all NPCs in view.</p>
+<p>Since the NPCs will move unpredictably around the environment, the camera will have to move as well. Good cinematographic practice suggests that if the camera needs to move a small distance, it should interpolate smoothly between its current point and the desired point. If the camera must move a large distance, it is often preferable to &quot;cut&quot;, meaning it jumps instantaneously to the desired point (creating the appearance that one camera is turned off and another is turned on, although in fact there is just one camera that can move instantaneously between points in virtual space).<a href="shadow.png"></a></p>
+<hr />
+<h2>What you need to know</h2>
+<h3>MyCamera</h3>
+<p>This is the class you will be altering for this assignment.</p>
+<p>Member variables:</p>
+<ul>
+  <li>targetPosition : a Vector3 to store the target position you would like the camera to move to</li>
+  <li>targetRotation: a Vector3 to store the target rotation in euler angles for the camera to move to.</li>
+  <li>moveSpeed: a float for how many Unity units to move the camera per second.</li>
+  <li>C : The instance of the camera class that is attached to the same object that the MyCamera class is attached to.</li>
+</ul>
+<p>The other class variables are used to handle methods, as a caveat of Unity C# is that static function variables do not exist. Class variables are used in replacement of that.  </p>
+<p>Member functions:</p>
+<ul>
+  <li>Initialize():	This function is for initialization and gathering of data, and is run once at the beginning of runtime. Use this function to grab references to other objects (Such as the Camera object)</li>
+  <li>Run(): This will be the primary function you alter. This function is called each frame that the game is running. In order to allow the camera to move each frame, the moveCamera() function is called each frame. This call at the bottom of the Update loop is meant to continue the camera moving if the object is set to move. For example, the following would start a move action (indicated by the true value for the beginMove parameter) when the Space bar is pressed. The conditional afterwards continues the camera movement as long as the camera has not reached its destination (which is tracked with the isMoving Boolean) </li>
+</ul>
+  <ul>
+  Void Update() {
+  <ul>
+    <p>if (Input.GetKeyDown(KeyCode.Space)) {
+    <ul>moveCamera(targetPosition, targetRotation, moveSpeed,true);</ul>
+      }</p>
+	  <p>Run();<p>
+    <p>if (isMoving) { 
+    <ul>moveCamera(targetPosition, targetRotation, moveSpeed); </ul>} </p>
+  </ul>
+  }    </ul>
+  <ul>
+  <li>MoveCamera(targetposition, targetRotation, speed, beginMove): This function moves the camera to a target position and euler rotation. Setting the beginMove parameter to true upon a call to this function resets the move action starting from the current position of the camera at the current speed. Not adding the beginMove parameter will continue the movement.
+  <ul>
+  <li>In order to rotate in place, use your current position as your targetPosition.</li>
+  <li>In order to instintaniously move, set the moveSpeed to a large value (such as 100);    </li>
+  </ul></li>
+  <li>getBoundingBoxes: provides a GameObject array of every obstacle block in the scene.</li>
+  <li>getCompys() : provides a GameObject array of every CompyAI Agent in the scene.</li>
+  <li>getFOV(): returns the FOV for the camera in degrees</li>
+  <li>getPosition(): returns the current position of the camera</li>
+  <li>getRotation(): returns the current quaternion rotation value of the camera (can be converted to euler angles or vis-versa) </li>
+</ul>   
+<hr />
+<h2>Instructions</h2>
+<p>Override the initialize() and run() functions in the MyCamera script. The run() function should compute and update the target position and rotation for the camera.</p>
+<p>You may make new member variables and new member functions.</p>
+<p>You should not override any other functions in the AICamera script as this may affect the autograder.</p>
+<p>You are NOT allowed to modify the CompyScript class. </p>
+<hr />
+<h2>Grading</h2>
+<p>Grade will be a percentage of how well each dino is in view of the camera. Dinos have a preferred view angle and distance that must be met whenever possible. We don't require that the entire dino be in view, but your camera must stay within specific viewing distance and view angle constraints.  You can use the VisibilityChecker.cs to check how often you are meeting these constraints.</p>
+<p>The autograder will sample test frames and determine visibility of the dinos. Your grade will be determined by a percentage of how often all 3 dinos are in view across all of the test frames.  1/3 of a credit is given for each dino visible to the camera per frame. Since it may be technically impossible to meet the view constraints on all dinosaurs at all times, a perfect grade will be to meet or surpass a baseline solution's percentage (the baseline solution is modest but beatable).</p>
+<hr />
+<h2>Hints</h2>
+<p>&nbsp;</p>
+<hr />
+<h2>Submission</h2>
+<p> To submit your solution, simply upload your completed MyCamera.cs file to TSquare. </p>
+</body>
+
+</html>
