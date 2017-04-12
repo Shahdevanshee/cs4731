@@ -184,14 +184,14 @@ class Agent:
         # YOUR CODE GOES ABOVE HERE
         return None
 
-    def returnMaxIndex(self, state, availableActions):
-            actions = availableActions
-            qValueArray = []
-            qValueIndexArray = []
-            for i in range(len(actions)):
-                    qValueArray.append(self.v_table[state][actions[i]])
-                    qValueIndexArray.append(actions[i])
-            return qValueIndexArray[qValueArray.index(max(qValueArray))]
+    # def returnMaxIndex(self, state, availableActions):
+            # actions = availableActions
+            # qValueArray = []
+            # qValueIndexArray = []
+            # for i in range(len(actions)):
+                    # qValueArray.append(self.v_table[state][actions[i]])
+                    # qValueIndexArray.append(actions[i])
+            # return qValueIndexArray[qValueArray.index(max(qValueArray))]
 
     ### Return the best action according to the policy, or a random action epsilon percent of the time.
     ### observation: the current observation (state)
