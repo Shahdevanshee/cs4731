@@ -180,7 +180,12 @@ class Agent:
     ### Update Q(s, a) in v_table for lastState and lastAction.
     def updateVtable(self, newState, lastState, action, reward, terminal, availableActions):
         # YOUR CODE GOES BELOW HERE
-
+        if terminal:
+            self.v_table[lastState][action] += self.learningRate * (reward - self.v_table[lastState][action])
+        else:
+            ret = [j for i, j in enumerate(self.v_table[newState]) if i in availableActions]
+            m = max(ret)
+            self.v_table[lastState][action] += self.learningRate * (reward + self.gamma * m - self.v_table[lastState][action])
         # YOUR CODE GOES ABOVE HERE
         return None
 
@@ -201,7 +206,11 @@ class Agent:
     ### Return the index of the action picked.
     def egreedy(self, observation):
         # YOUR CODE GOES BELOW HERE
-
+        num = random.uniform(0, 1)
+        if num < self.epsilon:
+            return random.randint(0, self.numActions - 1)
+        else:
+            return self.greedy(observation)
         # YOUR CODE GOES ABOVE HERE
         return 0
 
@@ -214,9 +223,10 @@ class Agent:
     def greedy(self, observation):
         self.initializeVtableStateEntry(observation.worldState)
         # YOUR CODE GOES BELOW HERE
-
+        m = max(self.v_table[tuple(observation.worldState)])
+        ret = [i for i, j in enumerate(self.v_table[tuple(observation.worldState)]) if j == m]
         # YOUR CODE GOES ABOVE HERE
-        return 0
+        return ret[0]
 
 
     # Reset the agent
